@@ -1,0 +1,23 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: peerup
+      POSTGRES_USER: peerup
+      POSTGRES_PASSWORD: peerup   #local dev only; prod password comes from host env var
+    ports:
+      - "5433:5432"   # host 5433 -> container 5432; avoids native Postgres 18 on 5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+  #dev-only GUI to browse Redis; not part of the app. Remove this service for prod/deploy.
+  redisinsight:
+    image: redis/redisinsight:latest
+    ports:
+      - "5540:5540"
+
+volumes:
+  pgdata:
