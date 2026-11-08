@@ -1,25 +1,25 @@
 package com.english.speaking.user.controller;
 
 import com.english.speaking.user.dto.UserResponse;
-import com.english.speaking.user.repository.UserRepository;
+import com.english.speaking.user.service.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class MeController {
 
-	private final UserRepository users;
+	private final UserService userService;
 
-	public MeController(UserRepository users) {
-		this.users = users;
+	public MeController(UserService userService) {
+		this.userService = userService;
 	}
 
 	@GetMapping("/me")
-	public ResponseEntity<UserResponse> me() {
-		return users.findAll().stream().findFirst()
-				.map(UserResponse::from)
+	public ResponseEntity<UserResponse> me(@AuthenticationPrincipal Long userId) {
+		return userService.getById(userId)
 				.map(ResponseEntity::ok)
-				.orElseGet(() -> ResponseEntity.noContent().build());
+				.orElseGet(() -> ResponseEntity.notFound().build());
 	}
 }
