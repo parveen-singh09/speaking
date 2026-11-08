@@ -29,7 +29,7 @@ public class SecurityConfig {
 				.formLogin(form -> form.disable())
 				.httpBasic(basic -> basic.disable())
 				.authorizeHttpRequests(auth -> auth
-						.requestMatchers("/actuator/health", "/auth/**").permitAll()
+						.requestMatchers("/actuator/health", "/auth/**", "/ws/**").permitAll()
 						.anyRequest().authenticated())
 				.exceptionHandling(ex -> ex.authenticationEntryPoint(
 						new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
