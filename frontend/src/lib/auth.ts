@@ -24,3 +24,18 @@ export async function fetchMe(): Promise<Me> {
   const res = await api.get<Me>('/me')
   return res.data
 }
+
+export async function refreshAccessToken(): Promise<string | null> {
+  const refreshToken = useAuth.getState().refreshToken
+  if (!refreshToken) {
+    return null
+  }
+  try {
+    const res = await api.post<TokenResponse>('/auth/refresh', { refreshToken })
+    useAuth.getState().setTokens(res.data.accessToken, res.data.refreshToken)
+    return res.data.accessToken
+  } catch {
+    useAuth.getState().clear()
+    return null
+  }
+}

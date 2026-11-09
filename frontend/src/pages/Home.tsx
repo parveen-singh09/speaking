@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchMe, type Me } from '../lib/auth'
 import { useAuth } from '../store/auth'
+import { connectWs, disconnectWs } from '../lib/ws'
+import { CallPanel } from '../components/CallPanel'
 
 export function Home() {
   const navigate = useNavigate()
@@ -13,6 +15,11 @@ export function Home() {
     fetchMe()
       .then(setMe)
       .catch(() => setError('We couldn’t load your profile. Try signing in again.'))
+  }, [])
+
+  useEffect(() => {
+    connectWs()
+    return () => disconnectWs()
   }, [])
 
   const logout = () => {
@@ -63,17 +70,7 @@ export function Home() {
           <h1 className="home-greeting">Hi, {me.name ?? me.email.split('@')[0]}</h1>
         </div>
 
-        <section className="action-card">
-          <h2>Ready to Talk?</h2>
-          <p>
-            We&rsquo;ll pair you with someone at your level for a live English conversation. Calls last
-            as long as you both want.
-          </p>
-          <button className="btn-primary" type="button" disabled>
-            Find a Partner
-          </button>
-          <span className="note">Matching arrives next &mdash; the call engine is being wired up.</span>
-        </section>
+        <CallPanel myId={me.id} />
       </main>
     </div>
   )

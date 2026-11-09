@@ -329,3 +329,23 @@ button {
     transition: none;
   }
 }
+
+.call-input {
+  width: 100%;
+  max-width: 240px;
+  padding: 12px 14px;
+  font-size: 1rem;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.call-input:focus-visible {
+  outline: 3px solid var(--accent-soft);
+  outline-offset: 2px;
+  border-color: var(--accent);
+}
+.call-actions {
+  display: flex;
+  gap: 10px;
+}
