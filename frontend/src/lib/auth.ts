@@ -20,6 +20,16 @@ export async function loginWithGoogleCode(code: string): Promise<void> {
   useAuth.getState().setTokens(res.data.accessToken, res.data.refreshToken)
 }
 
+export async function signup(email: string, password: string, name: string): Promise<void> {
+  const res = await api.post<TokenResponse>('/auth/signup', { email, password, name })
+  useAuth.getState().setTokens(res.data.accessToken, res.data.refreshToken)
+}
+
+export async function loginWithPassword(email: string, password: string): Promise<void> {
+  const res = await api.post<TokenResponse>('/auth/login', { email, password })
+  useAuth.getState().setTokens(res.data.accessToken, res.data.refreshToken)
+}
+
 export async function fetchMe(): Promise<Me> {
   const res = await api.get<Me>('/me')
   return res.data

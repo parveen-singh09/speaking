@@ -32,6 +32,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 			@NonNull FilterChain chain) throws ServletException, IOException {
 
 		String header = request.getHeader("Authorization");
+		org.slf4j.LoggerFactory.getLogger(JwtAuthFilter.class).info(
+				"[req] {} {} auth={}", request.getMethod(), request.getRequestURI(),
+				header == null ? "none" : header.substring(0, Math.min(20, header.length())));
 		if (header != null && header.startsWith(BEARER)) {
 			try {
 				Long userId = jwt.parseUserId(header.substring(BEARER.length()));

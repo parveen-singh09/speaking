@@ -1,14 +1,20 @@
 import { useGoogleLogin } from '@react-oauth/google'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import { loginWithGoogleCode } from '../lib/auth'
+import { loginWithGoogleCode, loginWithPassword, signup } from '../lib/auth'
+
+type Mode = 'login' | 'signup'
 
 export function Landing() {
   const navigate = useNavigate()
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
+  const [mode, setMode] = useState<Mode>('login')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [name, setName] = useState('')
 
-  const login = useGoogleLogin({
+  const googleLogin = useGoogleLogin({
     flow: 'auth-code',
     onSuccess: async (response) => {
       setBusy(true)
@@ -24,6 +30,58 @@ export function Landing() {
     onError: () => setError('Google sign-in was cancelled.'),
   })
 
+  const validate = (): string | null => {
+    const trimmedEmail = email.trim()
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+      return 'Enter a valid email address.'
+    }
+    if (mode === 'signup') {
+      if (name.trim().length < 2) {
+        return 'Name must be at least 2 characters.'
+      }
+      if (password.length < 8) {
+        return 'Password must be at least 8 characters.'
+      }
+      if (!/[0-9]/.test(password)) {
+        return 'Password must contain at least one number.'
+      }
+    } else if (!password) {
+      return 'Enter your password.'
+    }
+    return null
+  }
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    const problem = validate()
+    if (problem) {
+      setError(problem)
+      return
+    }
+    setBusy(true)
+    setError(null)
+    try {
+      if (mode === 'signup') {
+        await signup(email.trim(), password, name.trim())
+      } else {
+        await loginWithPassword(email.trim(), password)
+      }
+      navigate('/home')
+    } catch (err) {
+      const res = (err as { response?: { status?: number; data?: { message?: string } } })?.response
+      if (res?.status === 409) {
+        setError('That email is already registered. Try logging in.')
+      } else if (res?.status === 401) {
+        setError('Invalid email or password.')
+      } else if (res?.data?.message) {
+        setError(res.data.message)
+      } else {
+        setError('Something went wrong. Please try again.')
+      }
+      setBusy(false)
+    }
+  }
+
   return (
     <div className="landing">
       <section className="landing-pane">
@@ -38,10 +96,68 @@ export function Landing() {
           Get matched with a partner and jump into a live voice call. No scripts, no pressure &mdash;
           just conversation.
         </p>
-        <button className="btn-google" onClick={() => login()} disabled={busy} type="button">
-          <GoogleGlyph />
-          {busy ? 'Signing You In…' : 'Sign In with Google'}
+
+        <form className="auth-form" onSubmit={submit}>
+          {mode === 'signup' && (
+            <input
+              className="call-input auth-field"
+              type="text"
+              placeholder="Your name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              autoComplete="name"
+              required
+            />
+          )}
+          <input
+            className="call-input auth-field"
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            autoComplete="email"
+            required
+          />
+          <input
+            className="call-input auth-field"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
+            minLength={8}
+            required
+          />
+          <button className="btn-primary" type="submit" disabled={busy}>
+            {busy ? 'Please wait…' : mode === 'signup' ? 'Create Account' : 'Log In'}
+          </button>
+        </form>
+
+        <button
+          className="auth-toggle"
+          type="button"
+          onClick={() => {
+            setMode(mode === 'login' ? 'signup' : 'login')
+            setError(null)
+          }}
+        >
+          {mode === 'login' ? 'New here? Create an account' : 'Already have an account? Log in'}
         </button>
+
+        <div className="auth-divider">
+          <span>or</span>
+        </div>
+
+        <button
+          className="btn-google"
+          onClick={() => googleLogin()}
+          disabled={busy}
+          type="button"
+        >
+          <GoogleGlyph />
+          Sign In with Google
+        </button>
+
         {error && (
           <p className="landing-error" role="alert" aria-live="polite">
             {error}

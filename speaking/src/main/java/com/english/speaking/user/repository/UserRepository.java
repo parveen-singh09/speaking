@@ -8,4 +8,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	// Day 3 upserts by Google 'sub'; defined now since it costs nothing.
 	Optional<User> findByGoogleSub(String googleSub);
+
+	Optional<User> findByEmail(String email);
 }

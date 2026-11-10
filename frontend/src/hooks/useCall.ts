@@ -1,7 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { api } from '../lib/api'
 import { onWs, sendWs, type Envelope } from '../lib/ws'
 
-const ICE_SERVERS: RTCIceServer[] = [{ urls: 'stun:stun.l.google.com:19302' }]
+const FALLBACK_ICE: RTCIceServer[] = [{ urls: 'stun:stun.l.google.com:19302' }]
+
+async function fetchIceServers(): Promise<RTCIceServer[]> {
+  try {
+    const res = await api.get<RTCIceServer[]>('/turn')
+    return res.data.length > 0 ? res.data : FALLBACK_ICE
+  } catch {
+    return FALLBACK_ICE
+  }
+}
 
 export type CallStatus = 'idle' | 'searching' | 'calling' | 'ringing' | 'connected'
 
@@ -42,8 +52,9 @@ export function useCall(myId: number) {
   }, [])
 
   const createPc = useCallback(
-    (targetId: string) => {
-      const pc = new RTCPeerConnection({ iceServers: ICE_SERVERS })
+    async (targetId: string) => {
+      const iceServers = await fetchIceServers()
+      const pc = new RTCPeerConnection({ iceServers })
       pc.onicecandidate = (e) => {
         if (e.candidate) {
           sendWs({
@@ -81,7 +92,7 @@ export function useCall(myId: number) {
     async (targetId: string) => {
       setPeerId(targetId)
       setStatus('calling')
-      const pc = createPc(targetId)
+      const pc = await createPc(targetId)
       await addMic(pc)
       const offer = await pc.createOffer()
       await pc.setLocalDescription(offer)
@@ -92,7 +103,7 @@ export function useCall(myId: number) {
 
   const answerOffer = useCallback(
     async (from: string, sdp: RTCSessionDescriptionInit) => {
-      const pc = createPc(from)
+      const pc = await createPc(from)
       await addMic(pc)
       await pc.setRemoteDescription(sdp)
       for (const c of pendingIce.current) {

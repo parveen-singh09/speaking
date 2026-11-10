@@ -6,6 +6,9 @@ const baseURL = import.meta.env.VITE_API_URL as string
 export const api = axios.create({ baseURL })
 
 api.interceptors.request.use((config) => {
+  if (config.url?.startsWith('/auth/')) {
+    return config
+  }
   const token = useAuth.getState().accessToken
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
@@ -47,6 +50,9 @@ api.interceptors.response.use(
       return api(original)
     } catch (e) {
       useAuth.getState().clear()
+      if (window.location.pathname !== '/') {
+        window.location.href = '/'
+      }
       return Promise.reject(e)
     }
   },

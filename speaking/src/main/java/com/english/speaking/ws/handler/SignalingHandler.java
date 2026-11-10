@@ -68,6 +68,7 @@ public class SignalingHandler extends TextWebSocketHandler {
 		Long userId = userId(session);
 		JsonNode env = parse(message.getPayload());
 		String type = env == null ? null : env.path("type").asText(null);
+		log.info("[ws] recv userId={} type={} to={}", userId, type, env.path("to").asText(null));
 		if ("match.find".equals(type)) {
 			match.find(userId);
 		} else if ("match.cancel".equals(type)) {

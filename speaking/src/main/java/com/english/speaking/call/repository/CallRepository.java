@@ -11,4 +11,10 @@ public interface CallRepository extends JpaRepository<Call, Long> {
 	@Query("select c from Call c where c.status = 'active' "
 			+ "and (c.callerId = :userId or c.calleeId = :userId)")
 	Optional<Call> findActiveForUser(@Param("userId") Long userId);
+
+	@Query("select c from Call c where c.status = 'ended' "
+			+ "and (c.callerId = :userId or c.calleeId = :userId) "
+			+ "order by c.startedAt desc")
+	java.util.List<Call> findRecentForUser(@Param("userId") Long userId,
+			org.springframework.data.domain.Pageable pageable);
 }

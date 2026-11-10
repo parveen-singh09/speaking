@@ -1,7 +1,9 @@
 package com.english.speaking.auth.controller;
 
 import com.english.speaking.auth.dto.LoginRequest;
+import com.english.speaking.auth.dto.PasswordLoginRequest;
 import com.english.speaking.auth.dto.RefreshRequest;
+import com.english.speaking.auth.dto.SignupRequest;
 import com.english.speaking.auth.dto.TokenResponse;
 import com.english.speaking.auth.service.AuthService;
 import jakarta.validation.Valid;
@@ -23,6 +25,16 @@ public class AuthController {
 	@PostMapping("/google")
 	public TokenResponse google(@Valid @RequestBody LoginRequest request) {
 		return auth.loginWithGoogle(request.code());
+	}
+
+	@PostMapping("/signup")
+	public TokenResponse signup(@Valid @RequestBody SignupRequest request) {
+		return auth.signup(request.email(), request.password(), request.name());
+	}
+
+	@PostMapping("/login")
+	public TokenResponse login(@Valid @RequestBody PasswordLoginRequest request) {
+		return auth.login(request.email(), request.password());
 	}
 
 	@PostMapping("/refresh")
