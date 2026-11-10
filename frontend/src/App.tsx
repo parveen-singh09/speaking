@@ -4,6 +4,7 @@ import { Home } from './pages/Home'
 import { Profile } from './pages/Profile'
 import { Friends } from './pages/Friends'
 import { Chat } from './pages/Chat'
+import { NotFound } from './pages/NotFound'
 import { ProtectedRoute } from './components/ProtectedRoute'
 
 export function App() {
@@ -42,6 +43,7 @@ export function App() {
           </ProtectedRoute>
         }
       />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   )
 }

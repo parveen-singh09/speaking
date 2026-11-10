@@ -740,3 +740,41 @@ button {
 .dbubble-in { align-self: flex-start; background: var(--sh-panel-2); border: 1px solid var(--sh-border); border-bottom-left-radius: 4px; }
 .dbubble-out { align-self: flex-end; background: var(--sh-accent); color: #fff; border-bottom-right-radius: 4px; }
 .chat-send { display: flex; gap: 10px; padding-top: 12px; }
+
+/* ---- 404 page (self-contained, not inside .shell) ---- */
+.notfound {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: #0e0e11;
+  color: #f4f3f6;
+  text-align: center;
+}
+.notfound-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  max-width: 360px;
+}
+.notfound-code {
+  font-family: var(--font-display);
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: #e5502d;
+  line-height: 1;
+}
+.notfound h1 { font-size: 1.5rem; }
+.notfound p { color: #9a97a4; }
+.notfound .shell-btn {
+  margin-top: 8px;
+  color: #fff;
+  background: #e5502d;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 12px;
+  font-weight: 650;
+  cursor: pointer;
+}
+.notfound .shell-btn:hover { background: #ff6a44; }
