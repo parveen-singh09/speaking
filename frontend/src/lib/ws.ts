@@ -1,4 +1,3 @@
-import { useAuth } from '../store/auth'
 import { refreshAccessToken } from './auth'
 
 export interface Envelope {
