@@ -25,6 +25,16 @@ export async function fetchMe(): Promise<Me> {
   return res.data
 }
 
+export interface UpdateProfile {
+  bio?: string
+  englishLevel?: string
+}
+
+export async function updateProfile(update: UpdateProfile): Promise<Me> {
+  const res = await api.patch<Me>('/me', update)
+  return res.data
+}
+
 export async function refreshAccessToken(): Promise<string | null> {
   const refreshToken = useAuth.getState().refreshToken
   if (!refreshToken) {

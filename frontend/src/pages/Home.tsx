@@ -19,10 +19,10 @@ export function Home() {
 
   useEffect(() => {
     connectWs()
-    return () => disconnectWs()
   }, [])
 
   const logout = () => {
+    disconnectWs()
     clear()
     navigate('/')
   }
@@ -56,6 +56,12 @@ export function Home() {
         </span>
         <div className="topbar-user">
           {me.avatarUrl && <img className="avatar" src={me.avatarUrl} alt="" width={36} height={36} />}
+          <button className="btn-ghost" onClick={() => navigate('/friends')} type="button">
+            Friends
+          </button>
+          <button className="btn-ghost" onClick={() => navigate('/profile')} type="button">
+            Profile
+          </button>
           <button className="btn-ghost" onClick={logout} type="button">
             Log Out
           </button>
