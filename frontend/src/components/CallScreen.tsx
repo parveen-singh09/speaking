@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import type { useCall } from '../hooks/useCall'
 import { Icon } from './icons'
@@ -19,6 +19,8 @@ function titleCase(s: string | null): string {
   return s ? s[0].toUpperCase() + s.slice(1) : ''
 }
 
+const SEARCH_LIMIT_SEC = 240
+
 export function CallScreen({ call }: CallScreenProps) {
   const [searchSec, setSearchSec] = useState(0)
   const [confirmEnd, setConfirmEnd] = useState(false)
@@ -33,9 +35,20 @@ export function CallScreen({ call }: CallScreenProps) {
       setSearchSec(0)
       return
     }
-    const id = setInterval(() => setSearchSec((s) => s + 1), 1000)
+    const id = setInterval(() => {
+      setSearchSec((s) => Math.min(s + 1, SEARCH_LIMIT_SEC))
+    }, 1000)
     return () => clearInterval(id)
   }, [isSearching])
+
+  // No partner within the time limit: stop searching and return to Home.
+  const cancelFindRef = useRef(call.cancelFind)
+  cancelFindRef.current = call.cancelFind
+  useEffect(() => {
+    if (isSearching && searchSec >= SEARCH_LIMIT_SEC) {
+      cancelFindRef.current()
+    }
+  }, [isSearching, searchSec])
 
   // Intercept the browser Back button: keep the user on the call and ask
   // first, instead of silently navigating away (which would drop the call).

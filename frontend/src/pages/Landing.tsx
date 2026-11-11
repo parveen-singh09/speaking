@@ -19,6 +19,7 @@ export function Landing() {
   const navigate = useNavigate()
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
+  const [googleBusy, setGoogleBusy] = useState(false)
   const [mode, setMode] = useState<Mode>('login')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -27,7 +28,7 @@ export function Landing() {
   const googleLogin = useGoogleLogin({
     flow: 'auth-code',
     onSuccess: async (response) => {
-      setBusy(true)
+      setGoogleBusy(true)
       setError(null)
       try {
         await loginWithGoogleCode(response.code)
@@ -35,10 +36,13 @@ export function Landing() {
         navigate(me.onboarded ? '/home' : '/onboarding', { replace: true })
       } catch {
         setError('Sign-in failed. Please try again.')
-        setBusy(false)
+        setGoogleBusy(false)
       }
     },
-    onError: () => setError('Google sign-in was cancelled.'),
+    onError: () => {
+      setGoogleBusy(false)
+      setError('Google sign-in was cancelled.')
+    },
   })
 
   const validate = (): string | null => {
@@ -153,7 +157,11 @@ export function Landing() {
             minLength={8}
             required
           />
-          <button className="btn btn-primary btn-block btn-lg" type="submit" disabled={busy}>
+          <button
+            className="btn btn-primary btn-block btn-lg"
+            type="submit"
+            disabled={busy || googleBusy}
+          >
             {busy ? 'Please wait…' : mode === 'signup' ? 'Create Account' : 'Log In'}
           </button>
         </form>
@@ -169,11 +177,11 @@ export function Landing() {
         <button
           className="btn btn-google"
           onClick={() => googleLogin()}
-          disabled={busy}
+          disabled={busy || googleBusy}
           type="button"
         >
           <GoogleGlyph />
-          Sign In with Google
+          {googleBusy ? 'Signing in…' : 'Sign In with Google'}
         </button>
 
         {error && (
