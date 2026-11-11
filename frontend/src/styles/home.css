@@ -16,7 +16,7 @@
   min-height: 420px;
   display: flex;
   flex-direction: column;
-  background: radial-gradient(120% 110% at 28% 8%, var(--violet-400) 0%, var(--violet-600) 52%, var(--violet-700) 100%);
+  background: radial-gradient(120% 110% at 28% 8%, #a08bff 0%, #6d4aff 52%, #5a37e0 100%);
   box-shadow: var(--shadow);
 }
 .peer-hero-top {
@@ -49,7 +49,7 @@
   padding: 7px 14px;
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--violet-700);
+  color: #5a37e0;
   background: rgba(255, 255, 255, 0.94);
   border-radius: var(--radius-pill);
   box-shadow: 0 4px 12px rgba(28, 24, 48, 0.14);
@@ -142,7 +142,7 @@
 .call-start {
   width: 100%;
   max-width: 320px;
-  color: var(--violet-700);
+  color: #5a37e0;
   background: #fff;
   box-shadow: 0 10px 26px rgba(28, 24, 48, 0.24);
 }

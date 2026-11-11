@@ -16,6 +16,8 @@
 
   --surface: #ffffff;
   --surface-sunk: #faf9ff;
+  --surface-glass: rgba(255, 255, 255, 0.94);
+  --on-accent: #ffffff;
 
   --live: #16a34a;
   --live-soft: #dcfce7;
@@ -46,4 +48,39 @@
   --tab-h: 68px;
   --rail-w: 240px;
   --page-max: 1120px;
+}
+
+:root[data-theme="dark"] {
+  --violet-700: #b6a4ff;
+  --violet-600: #9b82ff;
+  --violet-500: #8a6cff;
+  --violet-400: #7357e0;
+  --violet-200: #4a3d78;
+  --violet-100: #2b2545;
+  --violet-050: #221d38;
+
+  --lav-bg: #121020;
+  --lav-bg-deep: #0d0b18;
+
+  --ink: #ece9f5;
+  --ink-soft: #a9a3bd;
+  --ink-faint: #746f88;
+
+  --surface: #1c1930;
+  --surface-sunk: #171426;
+  --surface-glass: rgba(28, 25, 48, 0.9);
+
+  --live: #34d399;
+  --live-soft: #123224;
+  --gold: #fbbf24;
+  --gold-soft: #3a2e12;
+  --danger: #f87171;
+  --danger-soft: #3a1d1d;
+
+  --border: #2b2740;
+  --border-strong: #3a3553;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 14px rgba(0, 0, 0, 0.3);
+  --shadow: 0 2px 6px rgba(0, 0, 0, 0.35), 0 14px 34px rgba(0, 0, 0, 0.45);
+  --shadow-violet: 0 10px 26px rgba(109, 74, 255, 0.45);
 }

@@ -10,6 +10,9 @@ html {
   overscroll-behavior: none;
   -webkit-text-size-adjust: 100%;
 }
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
 
 html,
 body,

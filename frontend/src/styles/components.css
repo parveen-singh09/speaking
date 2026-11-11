@@ -31,15 +31,22 @@
 
 .btn-primary {
   color: #fff;
-  background: linear-gradient(135deg, var(--violet-500), var(--violet-600));
-  box-shadow: var(--shadow-violet);
+  background: linear-gradient(135deg, #8363ff, #6d4aff);
+  box-shadow: 0 8px 20px rgba(109, 74, 255, 0.28);
 }
 .btn-primary:not(:disabled):hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 32px rgba(109, 74, 255, 0.42);
+  box-shadow: 0 12px 28px rgba(109, 74, 255, 0.34);
 }
 .btn-primary:not(:disabled):active {
   transform: translateY(0);
+}
+/* The violet glow blooms against dark surfaces; use a plain soft shadow instead. */
+:root[data-theme="dark"] .btn-primary {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+:root[data-theme="dark"] .btn-primary:not(:disabled):hover {
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.5);
 }
 
 .btn-ghost {

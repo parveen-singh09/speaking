@@ -6,6 +6,7 @@ import { listFriends } from '../lib/friends'
 import { OCCUPATIONS, COUNTRIES } from '../lib/onboarding-data'
 import { useAuth } from '../store/auth'
 import { disconnectWs } from '../lib/ws'
+import { useTheme, toggleTheme } from '../lib/theme'
 import { AppShell } from '../components/AppShell'
 import { Select } from '../components/Select'
 import { Icon } from '../components/icons'
@@ -36,6 +37,7 @@ export function Profile() {
   const [status, setStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
   const navigate = useNavigate()
   const clearAuth = useAuth((s) => s.clear)
+  const theme = useTheme()
 
   const handleLogout = () => {
     disconnectWs()
@@ -191,10 +193,16 @@ export function Profile() {
         </div>
       </form>
 
-      <button type="button" className="btn btn-soft btn-sm profile-logout" onClick={handleLogout}>
-        <Icon name="logout" size={16} />
-        Log out
-      </button>
+      <div className="profile-foot">
+        <button type="button" className="btn btn-soft btn-sm" onClick={toggleTheme}>
+          <Icon name={theme === 'dark' ? 'sun' : 'moon'} size={16} />
+          {theme === 'dark' ? 'Light mode' : 'Dark mode'}
+        </button>
+        <button type="button" className="btn btn-soft btn-sm profile-logout" onClick={handleLogout}>
+          <Icon name="logout" size={16} />
+          Log out
+        </button>
+      </div>
     </AppShell>
   )
 }

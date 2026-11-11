@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../store/auth'
 import { disconnectWs } from '../lib/ws'
 import { listPending, listFriends } from '../lib/friends'
+import { useTheme, toggleTheme } from '../lib/theme'
 import { Icon } from './icons'
 
 interface AppShellProps {
@@ -19,6 +20,7 @@ export function AppShell({ children }: AppShellProps) {
   const navigate = useNavigate()
   const location = useLocation()
   const clear = useAuth((s) => s.clear)
+  const theme = useTheme()
   const [friendsBadge, setFriendsBadge] = useState(0)
 
   // Friends badge = pending friend requests + total unread messages.
@@ -62,6 +64,10 @@ export function AppShell({ children }: AppShellProps) {
           </button>
         ))}
         <span className="rail-spacer" />
+        <button type="button" className="rail-link" onClick={toggleTheme}>
+          <Icon name={theme === 'dark' ? 'sun' : 'moon'} />
+          {theme === 'dark' ? 'Light mode' : 'Dark mode'}
+        </button>
         <button type="button" className="rail-link rail-logout" onClick={handleLogout}>
           <Icon name="logout" />
           Log out
