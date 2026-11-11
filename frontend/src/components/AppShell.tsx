@@ -1,7 +1,7 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../store/auth'
-import { disconnectWs } from '../lib/ws'
+import { disconnectWs, onWs, type Envelope } from '../lib/ws'
 import { listPending, listFriends } from '../lib/friends'
 import { useTheme, toggleTheme } from '../lib/theme'
 import { Icon } from './icons'
@@ -24,14 +24,28 @@ export function AppShell({ children }: AppShellProps) {
   const [friendsBadge, setFriendsBadge] = useState(0)
 
   // Friends badge = pending friend requests + total unread messages.
-  useEffect(() => {
+  const refreshBadge = useCallback(() => {
     Promise.all([listPending().catch(() => []), listFriends().catch(() => [])])
       .then(([pending, friends]) => {
         const unread = friends.reduce((sum, f) => sum + (f.unread ?? 0), 0)
         setFriendsBadge(pending.length + unread)
       })
       .catch(() => {})
-  }, [location.pathname])
+  }, [])
+
+  // Refresh on navigation.
+  useEffect(() => {
+    refreshBadge()
+  }, [location.pathname, refreshBadge])
+
+  // Refresh instantly when a message arrives over the WebSocket.
+  useEffect(() => {
+    return onWs((env: Envelope) => {
+      if (env.type === 'chat.receive') {
+        refreshBadge()
+      }
+    })
+  }, [refreshBadge])
 
   const handleLogout = () => {
     disconnectWs()
