@@ -75,6 +75,9 @@
 .info-text {
   flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 .info-key {
   font-size: 0.78rem;
@@ -82,6 +85,7 @@
 }
 .info-val {
   font-weight: 600;
+  font-size: 1rem;
   color: var(--ink);
 }
 
