@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { completeOnboarding } from '../lib/auth'
+import { completeOnboarding, fetchMe } from '../lib/auth'
 import { LEVELS, OCCUPATIONS, COUNTRIES, avatarsFor } from '../lib/onboarding-data'
 import { Select } from '../components/Select'
 
@@ -12,6 +12,19 @@ export function Onboarding() {
 
   const [gender, setGender] = useState('')
   const [avatarUrl, setAvatarUrl] = useState('')
+  const [googlePhoto, setGooglePhoto] = useState<string | null>(null)
+
+  // A Google photo is saved to avatarUrl at login (an http URL, not a local
+  // /avatars SVG). Offer it as a choice before onboarding overwrites it.
+  useEffect(() => {
+    fetchMe()
+      .then((m) => {
+        if (m.avatarUrl && /^https?:\/\//.test(m.avatarUrl)) {
+          setGooglePhoto(m.avatarUrl)
+        }
+      })
+      .catch(() => {})
+  }, [])
   const [englishLevel, setEnglishLevel] = useState('')
   const [occupation, setOccupation] = useState('')
   const [location, setLocation] = useState('')
@@ -77,6 +90,16 @@ export function Onboarding() {
 
         {step === 1 && (
           <div className="onb-avatars">
+            {googlePhoto && (
+              <button
+                type="button"
+                className={avatarUrl === googlePhoto ? 'onb-avatar google selected' : 'onb-avatar google'}
+                onClick={() => setAvatarUrl(googlePhoto)}
+                title="Your Google photo"
+              >
+                <img src={googlePhoto} alt="Your Google photo" width={72} height={72} referrerPolicy="no-referrer" />
+              </button>
+            )}
             {avatarsFor(gender).map((url) => (
               <button
                 key={url}
