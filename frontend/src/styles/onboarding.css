@@ -105,6 +105,11 @@
   height: auto;
   border-radius: var(--radius-sm);
 }
+.onb-avatar.google img {
+  aspect-ratio: 1;
+  height: auto;
+  object-fit: cover;
+}
 
 .onb-cards {
   display: grid;
