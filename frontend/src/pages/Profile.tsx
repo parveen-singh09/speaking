@@ -4,6 +4,8 @@ import { fetchMe, updateProfile, type Me } from '../lib/auth'
 import { fetchStats, type Stats } from '../lib/dashboard'
 import { listFriends } from '../lib/friends'
 import { OCCUPATIONS, COUNTRIES } from '../lib/onboarding-data'
+import { useAuth } from '../store/auth'
+import { disconnectWs } from '../lib/ws'
 import { AppShell } from '../components/AppShell'
 import { Select } from '../components/Select'
 import { Icon } from '../components/icons'
@@ -33,6 +35,13 @@ export function Profile() {
   const [location, setLocation] = useState('')
   const [status, setStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
   const navigate = useNavigate()
+  const clearAuth = useAuth((s) => s.clear)
+
+  const handleLogout = () => {
+    disconnectWs()
+    clearAuth()
+    navigate('/')
+  }
 
   useEffect(() => {
     fetchMe()
@@ -171,7 +180,7 @@ export function Profile() {
         </div>
 
         <div className="edit-foot">
-          <button className="btn btn-primary" type="submit" disabled={status === 'saving'}>
+          <button className="btn btn-primary btn-sm" type="submit" disabled={status === 'saving'}>
             {status === 'saving' ? 'Saving…' : 'Save Profile'}
           </button>
           {status === 'error' && (
@@ -181,6 +190,11 @@ export function Profile() {
           )}
         </div>
       </form>
+
+      <button type="button" className="btn btn-soft btn-sm profile-logout" onClick={handleLogout}>
+        <Icon name="logout" size={16} />
+        Log out
+      </button>
     </AppShell>
   )
 }

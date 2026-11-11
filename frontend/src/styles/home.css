@@ -31,6 +31,15 @@
   color: #fff;
   font-size: 1.25rem;
 }
+/* Hide the hero kicker on mobile; keep the status badge pushed right. */
+@media (max-width: 639px) {
+  .peer-hero-top {
+    justify-content: flex-end;
+  }
+  .peer-hero-top .kicker {
+    display: none;
+  }
+}
 .peer-online {
   display: inline-flex;
   align-items: center;

@@ -106,8 +106,18 @@
   gap: 12px;
 }
 .profile-logout {
-  margin-top: 16px;
+  width: auto;
+  margin-top: 18px;
   color: var(--danger);
+}
+.profile-logout:hover {
+  background: var(--danger-soft);
+}
+/* Logout lives in the desktop rail already; only show it here on mobile. */
+@media (min-width: 900px) {
+  .profile-logout {
+    display: none;
+  }
 }
 .field-static {
   padding: 13px 15px;
