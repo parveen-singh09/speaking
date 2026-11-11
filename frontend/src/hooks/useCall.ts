@@ -13,7 +13,7 @@ async function fetchIceServers(): Promise<RTCIceServer[]> {
   }
 }
 
-export type CallStatus = 'idle' | 'searching' | 'calling' | 'ringing' | 'connected'
+export type CallStatus = 'idle' | 'searching' | 'matched' | 'calling' | 'ringing' | 'connected'
 
 interface OfferPayload {
   from: string
@@ -26,11 +26,28 @@ interface IcePayload {
 interface MatchPayload {
   peerId: string
   initiator: boolean
+  name?: string | null
+  avatarUrl?: string | null
+  bio?: string | null
+  englishLevel?: string | null
+  location?: string | null
+}
+
+export interface PartnerInfo {
+  name: string | null
+  avatarUrl: string | null
+  bio: string | null
+  englishLevel: string | null
+  location: string | null
 }
 
 export function useCall(myId: number) {
   const [status, setStatus] = useState<CallStatus>('idle')
   const [peerId, setPeerId] = useState<string | null>(null)
+  const [partner, setPartner] = useState<PartnerInfo | null>(null)
+  const [connectedSec, setConnectedSec] = useState(0)
+  const [micMuted, setMicMuted] = useState(false)
+  const [speakerMuted, setSpeakerMuted] = useState(false)
 
   const pcRef = useRef<RTCPeerConnection | null>(null)
   const localRef = useRef<MediaStream | null>(null)
@@ -48,6 +65,10 @@ export function useCall(myId: number) {
     incomingOffer.current = null
     autoAccept.current = false
     setPeerId(null)
+    setPartner(null)
+    setConnectedSec(0)
+    setMicMuted(false)
+    setSpeakerMuted(false)
     setStatus('idle')
   }, [])
 
@@ -140,16 +161,82 @@ export function useCall(myId: number) {
     cleanup()
   }, [peerId, myId, cleanup])
 
+  const toggleMic = useCallback(() => {
+    const tracks = localRef.current?.getAudioTracks() ?? []
+    if (tracks.length === 0) {
+      return
+    }
+    const nextMuted = tracks[0].enabled
+    tracks.forEach((t) => {
+      t.enabled = !nextMuted
+    })
+    setMicMuted(nextMuted)
+  }, [])
+
+  const toggleSpeaker = useCallback(() => {
+    const el = remoteAudioRef.current
+    if (!el) {
+      return
+    }
+    el.muted = !el.muted
+    setSpeakerMuted(el.muted)
+  }, [])
+
+  useEffect(() => {
+    if (status !== 'connected') {
+      return
+    }
+    const id = setInterval(() => setConnectedSec((s) => s + 1), 1000)
+    return () => clearInterval(id)
+  }, [status])
+
+  const hangupRef = useRef(hangup)
+  useEffect(() => {
+    hangupRef.current = hangup
+  }, [hangup])
+
+  useEffect(() => {
+    return () => hangupRef.current()
+  }, [])
+
+  useEffect(() => {
+    if (!peerId) {
+      return
+    }
+    // Warn before a reload / tab close interrupts the call (native prompt).
+    const onBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault()
+      e.returnValue = ''
+    }
+    // Fires only when the page is actually torn down: tell the partner we left.
+    const onPageHide = () => {
+      sendWs({ type: 'call.hangup', to: peerId, payload: { from: String(myId) } })
+    }
+    window.addEventListener('beforeunload', onBeforeUnload)
+    window.addEventListener('pagehide', onPageHide)
+    return () => {
+      window.removeEventListener('beforeunload', onBeforeUnload)
+      window.removeEventListener('pagehide', onPageHide)
+    }
+  }, [peerId, myId])
+
   useEffect(() => {
     return onWs(async (env: Envelope) => {
       if (env.type === 'match.found') {
         const p = env.payload as MatchPayload
         setPeerId(p.peerId)
+        setPartner({
+          name: p.name ?? null,
+          avatarUrl: p.avatarUrl ?? null,
+          bio: p.bio ?? null,
+          englishLevel: p.englishLevel ?? null,
+          location: p.location ?? null,
+        })
+        setStatus('matched')
         if (p.initiator) {
           await startCall(p.peerId)
         } else {
           autoAccept.current = true
-          setStatus('calling')
         }
       } else if (env.type === 'call.offer') {
         const p = env.payload as OfferPayload
@@ -182,5 +269,19 @@ export function useCall(myId: number) {
     })
   }, [cleanup, startCall, answerOffer])
 
-  return { status, peerId, remoteAudioRef, findPartner, cancelFind, acceptCall, hangup }
+  return {
+    status,
+    peerId,
+    partner,
+    connectedSec,
+    micMuted,
+    speakerMuted,
+    remoteAudioRef,
+    findPartner,
+    cancelFind,
+    acceptCall,
+    hangup,
+    toggleMic,
+    toggleSpeaker,
+  }
 }

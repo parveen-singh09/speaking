@@ -6,4 +6,6 @@ import jakarta.validation.constraints.Size;
 public record UpdateProfileRequest(
 		@Size(max = 500) String bio,
 		@Pattern(regexp = "beginner|intermediate|advanced|fluent", message = "must be beginner, intermediate, advanced, or fluent")
-		String englishLevel) {}
+		String englishLevel,
+		@Size(max = 60) String occupation,
+		@Size(max = 100) String location) {}

@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { completeOnboarding } from '../lib/auth'
-import { LEVELS, OCCUPATIONS, INDIAN_STATES, avatarsFor } from '../lib/onboarding-data'
+import { LEVELS, OCCUPATIONS, COUNTRIES, avatarsFor } from '../lib/onboarding-data'
+import { Select } from '../components/Select'
 
 export function Onboarding() {
   const navigate = useNavigate()
@@ -51,6 +52,9 @@ export function Onboarding() {
             <span key={i} className={i <= step ? 'onb-dot active' : 'onb-dot'} />
           ))}
         </div>
+        <span className="onb-step-label">
+          Step {step + 1} of {steps.length}
+        </span>
         <h1 className="onb-title">{steps[step].title}</h1>
 
         {step === 0 && (
@@ -60,9 +64,12 @@ export function Onboarding() {
                 key={g}
                 type="button"
                 className={gender === g ? 'onb-choice selected' : 'onb-choice'}
-                onClick={() => { setGender(g); setAvatarUrl('') }}
+                onClick={() => {
+                  setGender(g)
+                  setAvatarUrl('')
+                }}
               >
-                {g[0].toUpperCase() + g.slice(1)}
+                <span className="onb-choice-label">{g[0].toUpperCase() + g.slice(1)}</span>
               </button>
             ))}
           </div>
@@ -108,7 +115,9 @@ export function Onboarding() {
                 className={occupation === o.value ? 'onb-occ selected' : 'onb-occ'}
                 onClick={() => setOccupation(o.value)}
               >
-                <span className="onb-occ-icon" aria-hidden="true">{o.icon}</span>
+                <span className="onb-occ-icon" aria-hidden="true">
+                  {o.icon}
+                </span>
                 <span className="onb-occ-label">{o.label}</span>
                 <span className="onb-occ-desc">{o.desc}</span>
               </button>
@@ -117,23 +126,33 @@ export function Onboarding() {
         )}
 
         {step === 4 && (
-          <select className="onb-select" value={location} onChange={(e) => setLocation(e.target.value)}>
-            <option value="">Select your state…</option>
-            {INDIAN_STATES.map((s) => (
-              <option key={s} value={s}>{s}</option>
-            ))}
-          </select>
+          <Select
+            value={location}
+            options={COUNTRIES}
+            placeholder="Select your country…"
+            searchable
+            onChange={setLocation}
+          />
         )}
 
-        {error && <p className="onb-error" role="alert">{error}</p>}
+        {error && (
+          <p className="onb-error" role="alert">
+            {error}
+          </p>
+        )}
 
         <div className="onb-actions">
           {step > 0 && (
-            <button className="onb-back" type="button" onClick={() => setStep(step - 1)}>
+            <button className="btn btn-soft" type="button" onClick={() => setStep(step - 1)}>
               Back
             </button>
           )}
-          <button className="onb-next" type="button" disabled={!steps[step].valid || saving} onClick={next}>
+          <button
+            className="btn btn-primary"
+            type="button"
+            disabled={!steps[step].valid || saving}
+            onClick={next}
+          >
             {last ? (saving ? 'Setting up…' : 'Finish') : 'Continue'}
           </button>
         </div>

@@ -1,0 +1,28 @@
+.notfound {
+  min-height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: radial-gradient(130% 90% at 50% 0%, var(--violet-100) 0%, var(--lav-bg) 60%);
+}
+.notfound-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  max-width: 380px;
+}
+.notfound-code {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 4.5rem;
+  line-height: 1;
+  color: var(--violet-600);
+}
+.notfound-inner h1 {
+  font-size: 1.5rem;
+}
+.notfound-inner p {
+  color: var(--ink-soft);
+}

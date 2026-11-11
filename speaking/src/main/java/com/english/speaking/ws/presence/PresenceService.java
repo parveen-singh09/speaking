@@ -25,4 +25,9 @@ public class PresenceService {
 	public boolean isOnline(Long userId) {
 		return Boolean.TRUE.equals(redis.opsForSet().isMember(ONLINE, String.valueOf(userId)));
 	}
+
+	public long onlineCount() {
+		Long size = redis.opsForSet().size(ONLINE);
+		return size != null ? size : 0L;
+	}
 }

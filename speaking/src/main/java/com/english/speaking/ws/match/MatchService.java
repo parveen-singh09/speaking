@@ -78,10 +78,20 @@ public class MatchService {
 	}
 
 	private void notifyMatch(String to, String peerId, boolean initiator) {
+		var partner = new java.util.HashMap<String, Object>();
+		partner.put("peerId", peerId);
+		partner.put("initiator", initiator);
+		users.findById(Long.valueOf(peerId)).ifPresent(u -> {
+			partner.put("name", u.getName());
+			partner.put("avatarUrl", u.getAvatarUrl());
+			partner.put("bio", u.getBio());
+			partner.put("englishLevel", u.getEnglishLevel());
+			partner.put("location", u.getLocation());
+		});
 		var envelope = Map.of(
 				"type", "match.found",
 				"to", to,
-				"payload", Map.of("peerId", peerId, "initiator", initiator));
+				"payload", partner);
 		router.publish(mapper.writeValueAsString(envelope));
 	}
 }

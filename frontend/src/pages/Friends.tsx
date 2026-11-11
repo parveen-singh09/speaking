@@ -59,36 +59,44 @@ export function Friends() {
 
   return (
     <AppShell>
-      <h1 className="shell-h1">Friends</h1>
+      <h1 className="page-title">Friends</h1>
+      <p className="page-sub">Find people to practise with and keep the conversation going.</p>
 
-      <section className="panel">
-        <h2>Find People</h2>
+      <section className="friends-search">
         <input
-          className="shell-input"
+          className="input"
           type="text"
-          placeholder="Search by name…"
+          placeholder="Search people by name…"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           aria-label="Search people by name"
         />
         {query.trim().length >= 2 && (
           <div className="search-results">
-            {searching && <p className="stat-label">Searching…</p>}
+            {searching && <p className="hint">Searching…</p>}
             {!searching && results.length === 0 && (
-              <p className="stat-label">No one found by that name.</p>
+              <p className="hint">No one found by that name.</p>
             )}
             {results.map((u) => (
-              <div key={u.userId} className="shell-row">
-                <span className="shell-identity">
-                  {u.avatarUrl && <img className="avatar" src={u.avatarUrl} alt="" width={32} height={32} />}
-                  <span>
-                    {u.name ?? `User ${u.userId}`}
-                    {u.englishLevel && <span className="stat-label"> · {u.englishLevel}</span>}
-                    {u.location && <span className="stat-label"> · {u.location}</span>}
+              <div key={u.userId} className="person-row">
+                <span className="person-id">
+                  <img
+                    className="person-avatar"
+                    src={u.avatarUrl ?? '/avatars/man1_adult.svg'}
+                    alt=""
+                    width={44}
+                    height={44}
+                  />
+                  <span className="person-main">
+                    <span className="person-name">{u.name ?? `User ${u.userId}`}</span>
+                    <span className="person-meta">
+                      {u.englishLevel && <span className="person-tag">{u.englishLevel}</span>}
+                      {u.location && <span className="person-tag">· {u.location}</span>}
+                    </span>
                   </span>
                 </span>
                 <button
-                  className="shell-btn"
+                  className="btn btn-ghost btn-sm"
                   type="button"
                   disabled={sentTo.has(u.userId)}
                   onClick={() => send(u.userId)}
@@ -102,63 +110,72 @@ export function Friends() {
       </section>
 
       {pending.length > 0 && (
-        <section className="panel">
-          <h2>Requests</h2>
-          {pending.map((p) => (
-            <div key={p.friendshipId} className="shell-row">
-              <FriendIdentity friend={p} />
-              <button className="shell-btn" type="button" onClick={() => accept(p.friendshipId)}>
-                Accept
-              </button>
-            </div>
-          ))}
-        </section>
-      )}
-
-      <section className="panel">
-        <h2>Your Friends</h2>
-        {friends.length === 0 ? (
-          <p>No friends yet. Search above to find people.</p>
-        ) : (
-          <div className="friend-cards">
-            {friends.map((f) => (
-              <button
-                key={f.friendshipId}
-                type="button"
-                className="friend-card"
-                onClick={() => navigate(`/chat/${f.userId}`)}
-              >
-                <img
-                  className="friend-card-avatar"
-                  src={f.avatarUrl ?? '/avatars/man1_adult.svg'}
-                  alt=""
-                  width={56}
-                  height={56}
-                />
-                <span className="friend-card-name">{f.name ?? `User ${f.userId}`}</span>
-                {f.englishLevel && (
-                  <span className="friend-card-level">{f.englishLevel}</span>
-                )}
-                <span className="friend-card-cta">Message →</span>
-              </button>
+        <>
+          <div className="section-head">
+            <h2>Requests</h2>
+            <span className="chip">{pending.length}</span>
+          </div>
+          <div className="search-results">
+            {pending.map((p) => (
+              <div key={p.friendshipId} className="person-row">
+                <span className="person-id">
+                  <img
+                    className="person-avatar"
+                    src={p.avatarUrl ?? '/avatars/man1_adult.svg'}
+                    alt=""
+                    width={44}
+                    height={44}
+                  />
+                  <span className="person-main">
+                    <span className="person-name">{p.name ?? `User ${p.userId}`}</span>
+                    {p.englishLevel && (
+                      <span className="person-meta">
+                        <span className="person-tag">{p.englishLevel}</span>
+                      </span>
+                    )}
+                  </span>
+                </span>
+                <button
+                  className="btn btn-primary btn-sm"
+                  type="button"
+                  onClick={() => accept(p.friendshipId)}
+                >
+                  Accept
+                </button>
+              </div>
             ))}
           </div>
-        )}
-      </section>
-    </AppShell>
-  )
-}
-
-function FriendIdentity({ friend }: { friend: Friend }) {
-  return (
-    <span className="shell-identity">
-      {friend.avatarUrl && (
-        <img className="avatar" src={friend.avatarUrl} alt="" width={32} height={32} />
+        </>
       )}
-      <span>
-        {friend.name ?? `User ${friend.userId}`}
-        {friend.englishLevel && <span className="stat-label"> · {friend.englishLevel}</span>}
-      </span>
-    </span>
+
+      <div className="section-head">
+        <h2>Your friends</h2>
+      </div>
+      {friends.length === 0 ? (
+        <div className="card empty">No friends yet. Search above to find people.</div>
+      ) : (
+        <div className="friend-grid">
+          {friends.map((f) => (
+            <button
+              key={f.friendshipId}
+              type="button"
+              className="friend-card"
+              onClick={() => navigate(`/chat/${f.userId}`)}
+            >
+              <img
+                className="friend-card-avatar"
+                src={f.avatarUrl ?? '/avatars/man1_adult.svg'}
+                alt=""
+                width={64}
+                height={64}
+              />
+              <span className="friend-card-name">{f.name ?? `User ${f.userId}`}</span>
+              {f.englishLevel && <span className="chip chip-outline">{f.englishLevel}</span>}
+              <span className="friend-card-cta">Message →</span>
+            </button>
+          ))}
+        </div>
+      )}
+    </AppShell>
   )
 }

@@ -1,0 +1,119 @@
+.profile-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  padding: 26px 20px 22px;
+}
+.profile-avatar-wrap {
+  position: relative;
+}
+.profile-avatar {
+  width: 104px;
+  height: 104px;
+  border-radius: var(--radius-pill);
+  border: 3px solid var(--surface);
+  box-shadow: var(--shadow);
+  background: var(--violet-100);
+}
+.profile-trophy {
+  position: absolute;
+  right: -4px;
+  bottom: -2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #b45309;
+  background: var(--gold-soft);
+  border: 2px solid var(--surface);
+  border-radius: var(--radius-pill);
+}
+.profile-name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.55rem;
+}
+.profile-email {
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+}
+.profile-bio {
+  max-width: 46ch;
+  color: var(--ink-soft);
+  margin-top: 4px;
+}
+
+/* Info rows (icon chip + label + value), from reference profile */
+.info-list {
+  display: flex;
+  flex-direction: column;
+}
+.info-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 4px;
+  border-bottom: 1px solid var(--border);
+}
+.info-row:last-child {
+  border-bottom: none;
+}
+.info-ico {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  flex: none;
+  border-radius: var(--radius-pill);
+  color: var(--violet-600);
+  background: var(--violet-100);
+}
+.info-text {
+  flex: 1;
+  min-width: 0;
+}
+.info-key {
+  font-size: 0.78rem;
+  color: var(--ink-faint);
+}
+.info-val {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 24px 0 10px;
+}
+.section-head h2 {
+  font-size: 1.2rem;
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.edit-foot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.profile-logout {
+  margin-top: 16px;
+  color: var(--danger);
+}
+.field-static {
+  padding: 13px 15px;
+  font-size: 1rem;
+  color: var(--ink-soft);
+  background: var(--surface-sunk);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}

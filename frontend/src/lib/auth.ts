@@ -42,6 +42,8 @@ export async function fetchMe(): Promise<Me> {
 export interface UpdateProfile {
   bio?: string
   englishLevel?: string
+  occupation?: string
+  location?: string
 }
 
 export async function updateProfile(update: UpdateProfile): Promise<Me> {

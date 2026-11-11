@@ -1,0 +1,377 @@
+.callscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  width: 100vw;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  padding: calc(22px + env(safe-area-inset-top)) 22px calc(20px + env(safe-area-inset-bottom));
+  background: var(--surface);
+  animation: cs-fade var(--dur) var(--ease);
+}
+@keyframes cs-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.cs-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 26px;
+  text-align: center;
+  width: 100%;
+}
+.cs-top {
+  flex: 1.1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  text-align: center;
+}
+
+.cs-headline {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.7rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--violet-500);
+  text-shadow: 0 2px 10px rgba(131, 99, 255, 0.28);
+}
+
+/* Finding — countdown ring */
+.cs-ring {
+  position: relative;
+  width: 196px;
+  height: 196px;
+  display: grid;
+  place-items: center;
+}
+.cs-ring svg {
+  position: absolute;
+  inset: 0;
+  transform: rotate(-90deg);
+}
+.cs-ring-track {
+  fill: none;
+  stroke: var(--violet-100);
+  stroke-width: 8;
+}
+.cs-ring-arc {
+  fill: none;
+  stroke: url(#cs-grad);
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-dasharray: 150 600;
+  animation: cs-spin 1.4s linear infinite;
+  transform-origin: center;
+}
+@keyframes cs-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.cs-ring-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.cs-timer-big {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 2.3rem;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.cs-timer-cap {
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+}
+
+/* Found — high-five illustration */
+.cs-highfive {
+  width: 184px;
+  height: auto;
+  animation: cs-pop var(--dur) var(--ease);
+}
+@keyframes cs-pop {
+  from {
+    transform: scale(0.82);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.cs-establishing {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+/* Connected — partner identity */
+.cs-avatar-ring {
+  width: 148px;
+  height: 148px;
+  padding: 7px;
+  border-radius: var(--radius-pill);
+  background: conic-gradient(from 210deg, var(--gold), #f6b24b, var(--violet-500), var(--gold));
+  display: grid;
+  place-items: center;
+  box-shadow: 0 12px 30px rgba(131, 99, 255, 0.24);
+}
+.cs-avatar-ring img {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-pill);
+  border: 4px solid var(--surface);
+  background: var(--violet-100);
+  object-fit: cover;
+}
+.cs-name-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.cs-name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.9rem;
+  color: var(--ink);
+}
+.cs-occ {
+  color: var(--ink-soft);
+  font-size: 1rem;
+}
+.cs-loc {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--ink-faint);
+  font-size: 0.95rem;
+}
+
+/* Connected: centered body grouping identity + about */
+.cs-body {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 12px 0;
+}
+.cs-identity {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+/* About card */
+.cs-about {
+  width: 100%;
+  max-width: 440px;
+  padding: 18px;
+  text-align: left;
+  background: var(--surface-sunk);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.cs-about-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.cs-about-head h2 {
+  font-size: 1.2rem;
+}
+.cs-about-body {
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+/* Footer: elapsed + controls */
+.cs-foot {
+  width: 100%;
+  max-width: 460px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+.cs-elapsed {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.1rem;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.cs-elapsed span {
+  color: var(--ink-faint);
+  font-weight: 400;
+}
+.cs-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 34px;
+}
+.cs-ctrl {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border-radius: var(--radius-pill);
+  color: var(--ink-soft);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+.cs-ctrl:hover {
+  transform: translateY(-2px);
+}
+.cs-ctrl.active {
+  color: var(--violet-700);
+  background: var(--violet-100);
+  border-color: var(--violet-200);
+}
+.cs-hangup {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  color: #fff;
+  background: linear-gradient(135deg, #f0506a, #e11d48);
+  border: none;
+  box-shadow: 0 12px 28px rgba(225, 29, 72, 0.4);
+  transition: transform var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease);
+}
+.cs-hangup svg {
+  transform: rotate(135deg);
+}
+.cs-hangup:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 34px rgba(225, 29, 72, 0.5);
+}
+
+/* End-call confirmation */
+.cs-confirm {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: grid;
+  place-items: center;
+  padding: 22px;
+  background: rgba(28, 24, 48, 0.5);
+  backdrop-filter: blur(4px);
+  animation: cs-fade var(--dur-fast) var(--ease);
+}
+.cs-confirm-card {
+  width: 100%;
+  max-width: 340px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 26px 22px 20px;
+  text-align: center;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  animation: cs-pop var(--dur) var(--ease);
+}
+.cs-confirm-ico {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  color: var(--danger);
+  background: var(--danger-soft);
+  margin-bottom: 4px;
+}
+.cs-confirm-card h2 {
+  font-size: 1.25rem;
+}
+.cs-confirm-card p {
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+.cs-confirm-actions {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  margin-top: 12px;
+}
+.cs-confirm-actions .btn {
+  flex: 1;
+}
+.btn-danger {
+  color: #fff;
+  background: linear-gradient(135deg, #f0506a, #e11d48);
+  box-shadow: 0 8px 20px rgba(225, 29, 72, 0.32);
+}
+.btn-danger:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 26px rgba(225, 29, 72, 0.42);
+}
+
+/* Cancel (X) for finding/found */
+.cs-cancel {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border-radius: var(--radius-pill);
+  color: var(--ink-soft);
+  background: var(--surface-sunk);
+  border: 1px solid var(--border-strong);
+  transition: transform var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease);
+}
+.cs-cancel:hover {
+  transform: translateY(-2px);
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+@media (min-width: 900px) {
+  .cs-headline {
+    font-size: 2rem;
+  }
+  .cs-ring {
+    width: 220px;
+    height: 220px;
+  }
+  .cs-avatar-ring {
+    width: 168px;
+    height: 168px;
+  }
+  .cs-name {
+    font-size: 2.1rem;
+  }
+}

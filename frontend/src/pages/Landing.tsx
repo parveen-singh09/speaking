@@ -5,6 +5,16 @@ import { loginWithGoogleCode, loginWithPassword, signup, fetchMe } from '../lib/
 
 type Mode = 'login' | 'signup'
 
+const FLOAT_PEERS = [
+  { src: '/avatars/woman3_adult.svg', style: { top: '10%', left: '12%', '--sz': '52px', '--delay': '0s' } },
+  { src: '/avatars/man5_adult.svg', style: { top: '18%', right: '16%', '--sz': '44px', '--delay': '0.8s' } },
+  { src: '/avatars/woman8_adult.svg', style: { top: '40%', left: '20%', '--sz': '60px', '--delay': '1.4s' } },
+  { src: '/avatars/man2_adult.svg', style: { top: '34%', right: '24%', '--sz': '50px', '--delay': '0.4s' } },
+  { src: '/avatars/woman11_adult.svg', style: { top: '58%', left: '38%', '--sz': '56px', '--delay': '1s' } },
+  { src: '/avatars/man9_adult.svg', style: { top: '64%', right: '14%', '--sz': '46px', '--delay': '1.8s' } },
+  { src: '/avatars/woman1_adult.svg', style: { top: '74%', left: '14%', '--sz': '48px', '--delay': '0.6s' } },
+] as const
+
 export function Landing() {
   const navigate = useNavigate()
   const [error, setError] = useState<string | null>(null)
@@ -33,12 +43,19 @@ export function Landing() {
 
   const validate = (): string | null => {
     const trimmedEmail = email.trim()
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
-      return 'Enter a valid email address.'
+    if (/[A-Z]/.test(trimmedEmail)) {
+      return 'Please type your email in lowercase (small letters).'
+    }
+    if (!/^[^\s@]+@gmail\.com$/.test(trimmedEmail)) {
+      return 'Enter a valid Gmail address, like you@gmail.com.'
     }
     if (mode === 'signup') {
-      if (name.trim().length < 2) {
+      const trimmedName = name.trim()
+      if (trimmedName.length < 2) {
         return 'Name must be at least 2 characters.'
+      }
+      if (!/^[A-Za-z ]+$/.test(trimmedName)) {
+        return 'Name can only contain letters.'
       }
       if (password.length < 8) {
         return 'Password must be at least 8 characters.'
@@ -61,11 +78,12 @@ export function Landing() {
     }
     setBusy(true)
     setError(null)
+    const normalizedEmail = email.trim().toLowerCase()
     try {
       if (mode === 'signup') {
-        await signup(email.trim(), password, name.trim())
+        await signup(normalizedEmail, password, name.trim())
       } else {
-        await loginWithPassword(email.trim(), password)
+        await loginWithPassword(normalizedEmail, password)
       }
       const me = await fetchMe()
       navigate(me.onboarded ? '/home' : '/onboarding', { replace: true })
@@ -82,6 +100,11 @@ export function Landing() {
       }
       setBusy(false)
     }
+  }
+
+  const toggleMode = () => {
+    setMode(mode === 'login' ? 'signup' : 'login')
+    setError(null)
   }
 
   return (
@@ -102,17 +125,17 @@ export function Landing() {
         <form className="auth-form" onSubmit={submit}>
           {mode === 'signup' && (
             <input
-              className="call-input auth-field"
+              className="input"
               type="text"
               placeholder="Your name"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value.replace(/[^A-Za-z ]/g, ''))}
               autoComplete="name"
               required
             />
           )}
           <input
-            className="call-input auth-field"
+            className="input"
             type="email"
             placeholder="Email"
             value={email}
@@ -121,7 +144,7 @@ export function Landing() {
             required
           />
           <input
-            className="call-input auth-field"
+            className="input"
             type="password"
             placeholder="Password"
             value={password}
@@ -130,28 +153,21 @@ export function Landing() {
             minLength={8}
             required
           />
-          <button className="btn-primary" type="submit" disabled={busy}>
+          <button className="btn btn-primary btn-block btn-lg" type="submit" disabled={busy}>
             {busy ? 'Please wait…' : mode === 'signup' ? 'Create Account' : 'Log In'}
           </button>
         </form>
 
-        <button
-          className="auth-toggle"
-          type="button"
-          onClick={() => {
-            setMode(mode === 'login' ? 'signup' : 'login')
-            setError(null)
-          }}
-        >
+        <button className="auth-toggle" type="button" onClick={toggleMode}>
           {mode === 'login' ? 'New here? Create an account' : 'Already have an account? Log in'}
         </button>
 
-        <div className="auth-divider">
+        <div className="divider">
           <span>or</span>
         </div>
 
         <button
-          className="btn-google"
+          className="btn btn-google"
           onClick={() => googleLogin()}
           disabled={busy}
           type="button"
@@ -166,11 +182,22 @@ export function Landing() {
           </p>
         )}
       </section>
+
       <aside className="landing-aside" aria-hidden="true">
-        <div className="pulse">
-          {Array.from({ length: 7 }).map((_, i) => (
-            <span key={i} />
+        <div className="landing-visual">
+          {FLOAT_PEERS.map((peer) => (
+            <span key={peer.src} className="float-peer" style={peer.style as React.CSSProperties}>
+              <img
+                src={peer.src}
+                alt=""
+                style={{ width: 'var(--sz)', height: 'var(--sz)' }}
+              />
+            </span>
           ))}
+          <div className="landing-headline-over">
+            <p className="kicker">Practice with people</p>
+            <h2>A partner is always just one tap away.</h2>
+          </div>
         </div>
       </aside>
     </div>

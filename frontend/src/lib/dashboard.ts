@@ -22,3 +22,8 @@ export async function fetchRecentCalls(): Promise<CallSummary[]> {
   const res = await api.get<CallSummary[]>('/me/calls')
   return res.data
 }
+
+export async function fetchOnlineCount(): Promise<number> {
+  const res = await api.get<{ count: number }>('/presence/online')
+  return res.data.count
+}

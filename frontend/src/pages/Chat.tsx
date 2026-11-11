@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { fetchHistory, sendMessage, type ChatMessage } from '../lib/chat'
 import { connectWs, onWs, type Envelope } from '../lib/ws'
 import { AppShell } from '../components/AppShell'
+import { Icon } from '../components/icons'
 
 export function Chat() {
+  const navigate = useNavigate()
   const { friendId } = useParams<{ friendId: string }>()
   const peerId = Number(friendId)
 
@@ -44,16 +46,27 @@ export function Chat() {
 
   return (
     <AppShell>
-      <h1 className="shell-h1">Chat</h1>
-      <div className="chat-wrap">
+      <div className="chat-page">
+        <div className="chat-head">
+          <button
+            type="button"
+            className="chat-back"
+            aria-label="Back to friends"
+            onClick={() => navigate('/friends')}
+          >
+            <Icon name="back" size={20} />
+          </button>
+          <span className="chat-peer-name">Conversation</span>
+        </div>
+
         <div className="chat-scroll">
           {messages.length === 0 ? (
-            <p className="feed-empty">No messages yet. Say hello.</p>
+            <p className="empty">No messages yet. Say hello.</p>
           ) : (
             messages.map((m) => (
               <div
                 key={m.id}
-                className={m.senderId === peerId ? 'dbubble dbubble-in' : 'dbubble dbubble-out'}
+                className={m.senderId === peerId ? 'bubble bubble-in' : 'bubble bubble-out'}
               >
                 {m.body}
               </div>
@@ -64,15 +77,15 @@ export function Chat() {
 
         <form className="chat-send" onSubmit={send}>
           <input
-            className="shell-input chat-field"
+            className="input chat-field"
             value={draft}
             maxLength={2000}
             placeholder="Type a message…"
             onChange={(e) => setDraft(e.target.value)}
             aria-label="Message"
           />
-          <button className="shell-btn" type="submit" disabled={!draft.trim()}>
-            Send
+          <button className="btn chat-send-btn" type="submit" disabled={!draft.trim()} aria-label="Send">
+            <Icon name="send" size={20} />
           </button>
         </form>
       </div>

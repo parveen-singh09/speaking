@@ -30,6 +30,12 @@ public class UserService {
 			if (request.englishLevel() != null) {
 				user.setEnglishLevel(request.englishLevel());
 			}
+			if (request.occupation() != null) {
+				user.setOccupation(request.occupation());
+			}
+			if (request.location() != null) {
+				user.setLocation(request.location());
+			}
 			return UserResponse.from(users.save(user));
 		});
 	}
