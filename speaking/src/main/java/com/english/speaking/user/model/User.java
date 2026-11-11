@@ -36,6 +36,15 @@ public class User {
 	@Column(name = "english_level")
 	private String englishLevel;
 
+	private String gender;
+
+	private String occupation;
+
+	private String location;
+
+	@Column(nullable = false)
+	private boolean onboarded;
+
 	@Column(name = "password_hash")
 	private String passwordHash;
 

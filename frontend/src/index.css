@@ -778,3 +778,164 @@ button {
   cursor: pointer;
 }
 .notfound .shell-btn:hover { background: #ff6a44; }
+
+/* ---- Onboarding wizard (self-contained dark) ---- */
+.onb {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: #0e0e11;
+  color: #f4f3f6;
+}
+.onb-card {
+  width: 100%;
+  max-width: 440px;
+  background: #16161b;
+  border: 1px solid #26262e;
+  border-radius: 18px;
+  padding: clamp(24px, 5vw, 36px);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.onb-progress { display: flex; gap: 6px; }
+.onb-dot { flex: 1; height: 4px; border-radius: 2px; background: #26262e; transition: background 200ms; }
+.onb-dot.active { background: #e5502d; }
+.onb-title { font-family: var(--font-display); font-size: 1.4rem; }
+.onb-choices { display: flex; flex-direction: column; gap: 10px; }
+.onb-choice {
+  padding: 14px 18px; text-align: left; font-size: 1rem; font-weight: 600;
+  color: #f4f3f6; background: #1c1c22; border: 1px solid #26262e; border-radius: 12px;
+  transition: border-color 150ms, background 150ms;
+}
+.onb-choice:hover { border-color: #3a3a44; }
+.onb-choice.selected { border-color: #e5502d; background: rgba(229,80,45,0.12); }
+.onb-avatars {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  max-height: 340px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.onb-avatar {
+  padding: 6px; background: #1c1c22; border: 2px solid #26262e; border-radius: 14px;
+  cursor: pointer; transition: border-color 150ms;
+}
+.onb-avatar img { display: block; width: 100%; height: auto; border-radius: 10px; background: #fff; }
+.onb-avatar.selected { border-color: #e5502d; }
+.onb-select {
+  width: 100%; padding: 13px 14px; font-size: 1rem; color: #f4f3f6;
+  background: #1c1c22; border: 1px solid #26262e; border-radius: 12px;
+}
+.onb-select:focus-visible { outline: 3px solid rgba(229,80,45,0.35); border-color: #e5502d; }
+.onb-error { color: #ff6a44; font-weight: 600; font-size: 0.95rem; }
+.onb-actions { display: flex; gap: 10px; justify-content: flex-end; }
+.onb-back {
+  padding: 12px 20px; font-weight: 600; color: #9a97a4; background: transparent;
+  border: 1px solid #26262e; border-radius: 12px;
+}
+.onb-next {
+  padding: 12px 24px; font-weight: 650; color: #fff; background: #e5502d;
+  border: none; border-radius: 12px; transition: background 150ms;
+}
+.onb-next:hover:not(:disabled) { background: #ff6a44; }
+.onb-next:disabled { opacity: 0.5; cursor: default; }
+
+/* ---- Onboarding: level hints + occupation cards ---- */
+.onb-choice { display: flex; flex-direction: column; gap: 2px; }
+.onb-choice-label { font-weight: 650; }
+.onb-choice-hint { font-size: 0.85rem; color: #9a97a4; font-weight: 400; }
+
+.onb-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+.onb-occ {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  text-align: left;
+  color: #f4f3f6;
+  background: #1c1c22;
+  border: 1px solid #26262e;
+  border-radius: 14px;
+  transition: border-color 150ms, background 150ms;
+}
+.onb-occ:hover { border-color: #3a3a44; }
+.onb-occ.selected { border-color: #e5502d; background: rgba(229, 80, 45, 0.12); }
+.onb-occ-icon { font-size: 1.5rem; }
+.onb-occ-label { font-weight: 650; font-size: 0.95rem; }
+.onb-occ-desc { font-size: 0.8rem; color: #9a97a4; }
+
+/* ---- Profile display ---- */
+.profile-head { flex-direction: row; align-items: center; gap: 18px; }
+.profile-avatar { border-radius: 50%; background: #1c1c22; border: 1px solid #26262e; flex-shrink: 0; }
+.profile-name { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; }
+.profile-meta { color: #9a97a4; font-size: 0.9rem; }
+.profile-bio { color: #f4f3f6; margin-top: 8px; }
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  width: 100%;
+  margin: 0;
+}
+.profile-grid dt { font-size: 0.8rem; color: #9a97a4; margin-bottom: 2px; }
+.profile-grid dd { margin: 0; font-weight: 600; text-transform: capitalize; }
+
+/* ---- Friend search results ---- */
+.search-results {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 4px;
+}
+
+/* ---- Friend cards (clickable → chat) ---- */
+.friend-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  width: 100%;
+}
+.friend-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 18px 12px;
+  background: var(--sh-panel-2);
+  border: 1px solid var(--sh-border);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: border-color 150ms var(--ease), transform 150ms var(--ease);
+}
+.friend-card:hover {
+  border-color: var(--sh-accent);
+  transform: translateY(-2px);
+}
+.friend-card:focus-visible {
+  outline: 3px solid rgba(229, 80, 45, 0.35);
+  outline-offset: 2px;
+}
+.friend-card-avatar {
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid var(--sh-border);
+}
+.friend-card-name { font-weight: 650; color: var(--sh-ink); }
+.friend-card-level {
+  font-size: 0.8rem;
+  color: var(--sh-ink-soft);
+  text-transform: capitalize;
+}
+.friend-card-cta {
+  margin-top: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--sh-accent-ink);
+}

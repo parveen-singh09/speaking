@@ -18,6 +18,19 @@ export async function listPending(): Promise<Friend[]> {
   return res.data
 }
 
+export interface UserSearchResult {
+  userId: number
+  name: string | null
+  avatarUrl: string | null
+  englishLevel: string | null
+  location: string | null
+}
+
+export async function searchUsers(q: string): Promise<UserSearchResult[]> {
+  const res = await api.get<UserSearchResult[]>('/friends/search', { params: { q } })
+  return res.data
+}
+
 export async function sendFriendRequest(addresseeId: number): Promise<void> {
   await api.post('/friends/requests', { addresseeId })
 }

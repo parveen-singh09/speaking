@@ -4,6 +4,7 @@ import { Home } from './pages/Home'
 import { Profile } from './pages/Profile'
 import { Friends } from './pages/Friends'
 import { Chat } from './pages/Chat'
+import { Onboarding } from './pages/Onboarding'
 import { NotFound } from './pages/NotFound'
 import { ProtectedRoute } from './components/ProtectedRoute'
 
@@ -40,6 +41,14 @@ export function App() {
         element={
           <ProtectedRoute>
             <Chat />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/onboarding"
+        element={
+          <ProtectedRoute>
+            <Onboarding />
           </ProtectedRoute>
         }
       />

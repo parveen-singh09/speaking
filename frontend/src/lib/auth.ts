@@ -13,6 +13,10 @@ export interface Me {
   avatarUrl: string | null
   bio: string | null
   englishLevel: string | null
+  gender: string | null
+  occupation: string | null
+  location: string | null
+  onboarded: boolean
 }
 
 export async function loginWithGoogleCode(code: string): Promise<void> {
@@ -42,6 +46,19 @@ export interface UpdateProfile {
 
 export async function updateProfile(update: UpdateProfile): Promise<Me> {
   const res = await api.patch<Me>('/me', update)
+  return res.data
+}
+
+export interface OnboardingData {
+  englishLevel: string
+  avatarUrl: string
+  gender: string
+  occupation: string
+  location: string
+}
+
+export async function completeOnboarding(data: OnboardingData): Promise<Me> {
+  const res = await api.post<Me>('/me/onboarding', data)
   return res.data
 }
 

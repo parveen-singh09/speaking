@@ -1,7 +1,7 @@
 import { useGoogleLogin } from '@react-oauth/google'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import { loginWithGoogleCode, loginWithPassword, signup } from '../lib/auth'
+import { loginWithGoogleCode, loginWithPassword, signup, fetchMe } from '../lib/auth'
 
 type Mode = 'login' | 'signup'
 
@@ -21,7 +21,8 @@ export function Landing() {
       setError(null)
       try {
         await loginWithGoogleCode(response.code)
-        navigate('/home')
+        const me = await fetchMe()
+        navigate(me.onboarded ? '/home' : '/onboarding', { replace: true })
       } catch {
         setError('Sign-in failed. Please try again.')
         setBusy(false)
@@ -66,7 +67,8 @@ export function Landing() {
       } else {
         await loginWithPassword(email.trim(), password)
       }
-      navigate('/home')
+      const me = await fetchMe()
+      navigate(me.onboarded ? '/home' : '/onboarding', { replace: true })
     } catch (err) {
       const res = (err as { response?: { status?: number; data?: { message?: string } } })?.response
       if (res?.status === 409) {

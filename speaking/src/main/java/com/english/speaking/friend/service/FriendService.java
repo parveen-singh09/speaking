@@ -1,6 +1,7 @@
 package com.english.speaking.friend.service;
 
 import com.english.speaking.friend.dto.FriendResponse;
+import com.english.speaking.friend.dto.UserSearchResult;
 import com.english.speaking.friend.model.Friendship;
 import com.english.speaking.friend.repository.FriendshipRepository;
 import com.english.speaking.user.model.User;
@@ -54,6 +55,16 @@ public class FriendService {
 					return toResponse(f.getId(), otherId);
 				})
 				.filter(r -> r != null)
+				.toList();
+	}
+
+	public List<UserSearchResult> search(Long userId, String query) {
+		if (query == null || query.isBlank()) {
+			return List.of();
+		}
+		return users.findTop20ByOnboardedTrueAndNameContainingIgnoreCaseAndIdNot(query.strip(), userId)
+				.stream()
+				.map(UserSearchResult::from)
 				.toList();
 	}
 

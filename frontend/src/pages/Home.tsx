@@ -24,11 +24,19 @@ export function Home() {
   const [calls, setCalls] = useState<CallSummary[]>([])
 
   useEffect(() => {
-    connectWs()
-    fetchMe().then(setMe).catch(() => {})
-    fetchStats().then(setStats).catch(() => {})
-    fetchRecentCalls().then(setCalls).catch(() => {})
-  }, [])
+    fetchMe()
+      .then((m) => {
+        if (!m.onboarded) {
+          navigate('/onboarding', { replace: true })
+          return
+        }
+        setMe(m)
+        connectWs()
+        fetchStats().then(setStats).catch(() => {})
+        fetchRecentCalls().then(setCalls).catch(() => {})
+      })
+      .catch(() => {})
+  }, [navigate])
 
   const call = useCall(me?.id ?? 0)
 

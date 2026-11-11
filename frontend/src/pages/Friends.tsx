@@ -4,8 +4,10 @@ import {
   acceptFriend,
   listFriends,
   listPending,
+  searchUsers,
   sendFriendRequest,
   type Friend,
+  type UserSearchResult,
 } from '../lib/friends'
 import { AppShell } from '../components/AppShell'
 
@@ -13,8 +15,10 @@ export function Friends() {
   const navigate = useNavigate()
   const [friends, setFriends] = useState<Friend[]>([])
   const [pending, setPending] = useState<Friend[]>([])
-  const [targetId, setTargetId] = useState('')
-  const [note, setNote] = useState<string | null>(null)
+  const [query, setQuery] = useState('')
+  const [results, setResults] = useState<UserSearchResult[]>([])
+  const [searching, setSearching] = useState(false)
+  const [sentTo, setSentTo] = useState<Set<number>>(new Set())
 
   const load = () => {
     listFriends().then(setFriends).catch(() => {})
@@ -23,17 +27,28 @@ export function Friends() {
 
   useEffect(load, [])
 
-  const send = async () => {
-    const id = Number(targetId)
-    if (!id) {
+  useEffect(() => {
+    const q = query.trim()
+    if (q.length < 2) {
+      setResults([])
       return
     }
+    setSearching(true)
+    const t = setTimeout(() => {
+      searchUsers(q)
+        .then(setResults)
+        .catch(() => setResults([]))
+        .finally(() => setSearching(false))
+    }, 300)
+    return () => clearTimeout(t)
+  }, [query])
+
+  const send = async (userId: number) => {
     try {
-      await sendFriendRequest(id)
-      setNote(`Request sent to user ${id}.`)
-      setTargetId('')
+      await sendFriendRequest(userId)
+      setSentTo((prev) => new Set(prev).add(userId))
     } catch {
-      setNote('Could not send request.')
+      // ignore; button stays available to retry
     }
   }
 
@@ -47,22 +62,43 @@ export function Friends() {
       <h1 className="shell-h1">Friends</h1>
 
       <section className="panel">
-        <h2>Add a Friend</h2>
-        <div className="call-actions">
-          <input
-            className="shell-input"
-            type="number"
-            inputMode="numeric"
-            placeholder="User ID…"
-            value={targetId}
-            onChange={(e) => setTargetId(e.target.value)}
-            aria-label="User ID to add"
-          />
-          <button className="shell-btn" type="button" disabled={!targetId} onClick={send}>
-            Send Request
-          </button>
-        </div>
-        {note && <span className="stat-label">{note}</span>}
+        <h2>Find People</h2>
+        <input
+          className="shell-input"
+          type="text"
+          placeholder="Search by name…"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          aria-label="Search people by name"
+        />
+        {query.trim().length >= 2 && (
+          <div className="search-results">
+            {searching && <p className="stat-label">Searching…</p>}
+            {!searching && results.length === 0 && (
+              <p className="stat-label">No one found by that name.</p>
+            )}
+            {results.map((u) => (
+              <div key={u.userId} className="shell-row">
+                <span className="shell-identity">
+                  {u.avatarUrl && <img className="avatar" src={u.avatarUrl} alt="" width={32} height={32} />}
+                  <span>
+                    {u.name ?? `User ${u.userId}`}
+                    {u.englishLevel && <span className="stat-label"> · {u.englishLevel}</span>}
+                    {u.location && <span className="stat-label"> · {u.location}</span>}
+                  </span>
+                </span>
+                <button
+                  className="shell-btn"
+                  type="button"
+                  disabled={sentTo.has(u.userId)}
+                  onClick={() => send(u.userId)}
+                >
+                  {sentTo.has(u.userId) ? 'Sent' : 'Add'}
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
 
       {pending.length > 0 && (
@@ -82,20 +118,31 @@ export function Friends() {
       <section className="panel">
         <h2>Your Friends</h2>
         {friends.length === 0 ? (
-          <p>No friends yet. Send a request above to get started.</p>
+          <p>No friends yet. Search above to find people.</p>
         ) : (
-          friends.map((f) => (
-            <div key={f.friendshipId} className="shell-row">
-              <FriendIdentity friend={f} />
+          <div className="friend-cards">
+            {friends.map((f) => (
               <button
-                className="shell-btn-ghost"
+                key={f.friendshipId}
                 type="button"
+                className="friend-card"
                 onClick={() => navigate(`/chat/${f.userId}`)}
               >
-                Chat
+                <img
+                  className="friend-card-avatar"
+                  src={f.avatarUrl ?? '/avatars/man1_adult.svg'}
+                  alt=""
+                  width={56}
+                  height={56}
+                />
+                <span className="friend-card-name">{f.name ?? `User ${f.userId}`}</span>
+                {f.englishLevel && (
+                  <span className="friend-card-level">{f.englishLevel}</span>
+                )}
+                <span className="friend-card-cta">Message →</span>
               </button>
-            </div>
-          ))
+            ))}
+          </div>
         )}
       </section>
     </AppShell>

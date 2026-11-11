@@ -10,4 +10,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	Optional<User> findByGoogleSub(String googleSub);
 
 	Optional<User> findByEmail(String email);
+
+	java.util.List<User> findTop20ByOnboardedTrueAndNameContainingIgnoreCaseAndIdNot(
+			String name, Long excludeId);
 }

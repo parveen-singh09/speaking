@@ -1,8 +1,18 @@
 import { useEffect, useState } from 'react'
 import { fetchMe, updateProfile, type Me } from '../lib/auth'
+import { OCCUPATIONS } from '../lib/onboarding-data'
 import { AppShell } from '../components/AppShell'
 
-const LEVELS = ['beginner', 'intermediate', 'advanced'] as const
+const LEVELS = ['beginner', 'intermediate', 'advanced', 'fluent'] as const
+
+function titleCase(s: string): string {
+  return s ? s[0].toUpperCase() + s.slice(1) : s
+}
+
+function occupationLabel(value: string | null): string {
+  if (!value) return '—'
+  return OCCUPATIONS.find((o) => o.value === value)?.label ?? titleCase(value.replace(/_/g, ' '))
+}
 
 export function Profile() {
   const [me, setMe] = useState<Me | null>(null)
@@ -24,7 +34,8 @@ export function Profile() {
     e.preventDefault()
     setStatus('saving')
     try {
-      await updateProfile({ bio, englishLevel: level || undefined })
+      const updated = await updateProfile({ bio, englishLevel: level || undefined })
+      setMe(updated)
       setStatus('saved')
     } catch {
       setStatus('error')
@@ -42,15 +53,34 @@ export function Profile() {
   return (
     <AppShell>
       <h1 className="shell-h1">Your Profile</h1>
+
+      <section className="panel profile-head">
+        {me.avatarUrl && <img className="profile-avatar" src={me.avatarUrl} alt="" width={88} height={88} />}
+        <div>
+          <div className="profile-name">{me.name ?? me.email}</div>
+          <div className="profile-meta">{me.email}</div>
+          {me.bio && <p className="profile-bio">{me.bio}</p>}
+        </div>
+      </section>
+
+      <section className="panel">
+        <h2>Details</h2>
+        <dl className="profile-grid">
+          <div><dt>Gender</dt><dd>{titleCase(me.gender ?? '') || '—'}</dd></div>
+          <div><dt>English level</dt><dd>{titleCase(me.englishLevel ?? '') || '—'}</dd></div>
+          <div><dt>Occupation</dt><dd>{occupationLabel(me.occupation)}</dd></div>
+          <div><dt>Location</dt><dd>{me.location ?? '—'}</dd></div>
+        </dl>
+      </section>
+
       <form className="panel" onSubmit={save}>
+        <h2>Edit</h2>
         <label className="shell-field">
           <span className="shell-field-label">English level</span>
           <select className="shell-input" value={level} onChange={(e) => setLevel(e.target.value)}>
             <option value="">Not set</option>
             {LEVELS.map((l) => (
-              <option key={l} value={l}>
-                {l[0].toUpperCase() + l.slice(1)}
-              </option>
+              <option key={l} value={l}>{titleCase(l)}</option>
             ))}
           </select>
         </label>

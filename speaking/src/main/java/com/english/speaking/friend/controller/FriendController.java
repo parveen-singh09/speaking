@@ -2,6 +2,7 @@ package com.english.speaking.friend.controller;
 
 import com.english.speaking.friend.dto.FriendResponse;
 import com.english.speaking.friend.dto.SendRequest;
+import com.english.speaking.friend.dto.UserSearchResult;
 import com.english.speaking.friend.service.FriendService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -32,6 +33,13 @@ public class FriendController {
 	@GetMapping("/pending")
 	public List<FriendResponse> pending(@AuthenticationPrincipal Long userId) {
 		return friends.listPending(userId);
+	}
+
+	@GetMapping("/search")
+	public List<UserSearchResult> search(
+			@AuthenticationPrincipal Long userId,
+			@org.springframework.web.bind.annotation.RequestParam String q) {
+		return friends.search(userId, q);
 	}
 
 	@PostMapping("/requests")
