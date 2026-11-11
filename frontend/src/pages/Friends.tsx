@@ -10,9 +10,12 @@ import {
   type UserSearchResult,
 } from '../lib/friends'
 import { AppShell } from '../components/AppShell'
+import { useCallContext } from '../components/CallProvider'
+import { Icon } from '../components/icons'
 
 export function Friends() {
   const navigate = useNavigate()
+  const call = useCallContext()
   const [friends, setFriends] = useState<Friend[]>([])
   const [pending, setPending] = useState<Friend[]>([])
   const [query, setQuery] = useState('')
@@ -57,6 +60,8 @@ export function Friends() {
     load()
   }
 
+  const friendIds = new Set(friends.map((f) => f.userId))
+
   return (
     <AppShell>
       <h1 className="page-title">Friends</h1>
@@ -95,14 +100,20 @@ export function Friends() {
                     </span>
                   </span>
                 </span>
-                <button
-                  className="btn btn-ghost btn-sm"
-                  type="button"
-                  disabled={sentTo.has(u.userId)}
-                  onClick={() => send(u.userId)}
-                >
-                  {sentTo.has(u.userId) ? 'Sent' : 'Add'}
-                </button>
+                {friendIds.has(u.userId) ? (
+                  <button className="btn btn-soft btn-sm" type="button" disabled>
+                    Added
+                  </button>
+                ) : (
+                  <button
+                    className="btn btn-ghost btn-sm"
+                    type="button"
+                    disabled={sentTo.has(u.userId)}
+                    onClick={() => send(u.userId)}
+                  >
+                    {sentTo.has(u.userId) ? 'Sent' : 'Add'}
+                  </button>
+                )}
               </div>
             ))}
           </div>
@@ -154,26 +165,70 @@ export function Friends() {
       {friends.length === 0 ? (
         <div className="card empty">No friends yet. Search above to find people.</div>
       ) : (
-        <div className="friend-grid">
-          {friends.map((f) => (
-            <button
-              key={f.friendshipId}
-              type="button"
-              className="friend-card"
-              onClick={() => navigate(`/chat/${f.userId}`)}
-            >
-              <img
-                className="friend-card-avatar"
-                src={f.avatarUrl ?? '/avatars/man1_adult.svg'}
-                alt=""
-                width={64}
-                height={64}
-              />
-              <span className="friend-card-name">{f.name ?? `User ${f.userId}`}</span>
-              {f.englishLevel && <span className="chip chip-outline">{f.englishLevel}</span>}
-              <span className="friend-card-cta">Message →</span>
-            </button>
-          ))}
+        <div className="friend-list">
+          {friends.map((f) => {
+            const friendName = f.name ?? `User ${f.userId}`
+            const hasUnread = (f.unread ?? 0) > 0
+            return (
+              <div key={f.friendshipId} className="friend-row">
+                <button
+                  type="button"
+                  className="friend-row-avatar-btn"
+                  aria-label={`View ${friendName}'s profile`}
+                  onClick={() => navigate(`/user/${f.userId}`)}
+                >
+                  <span className="friend-row-avatar-wrap">
+                    <img
+                      className="friend-row-avatar"
+                      src={f.avatarUrl ?? '/avatars/man1_adult.svg'}
+                      alt=""
+                      width={52}
+                      height={52}
+                    />
+                    <span
+                      className={f.online ? 'presence-dot online' : 'presence-dot offline'}
+                      aria-label={f.online ? 'Online' : 'Offline'}
+                    />
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  className="friend-row-open"
+                  onClick={() => navigate(`/chat/${f.userId}`)}
+                >
+                  <span className="friend-row-main">
+                    <span className="friend-row-name">{friendName}</span>
+                    {hasUnread ? (
+                      <span className="friend-row-preview unread">New message</span>
+                    ) : (
+                      <span className="friend-row-preview">
+                        {f.lastMessage
+                          ? `${f.lastMessageFromMe ? 'You: ' : ''}${f.lastMessage}`
+                          : 'Tap to start messaging'}
+                      </span>
+                    )}
+                  </span>
+                  {hasUnread && <span className="friend-row-badge">{f.unread}</span>}
+                </button>
+                <button
+                  type="button"
+                  className="friend-row-call"
+                  aria-label={`Call ${friendName}`}
+                  onClick={() =>
+                    call.callPeer(String(f.userId), {
+                      name: f.name,
+                      avatarUrl: f.avatarUrl,
+                      bio: f.bio ?? null,
+                      englishLevel: f.englishLevel,
+                      location: f.location ?? null,
+                    })
+                  }
+                >
+                  <Icon name="phone" size={20} />
+                </button>
+              </div>
+            )
+          })}
         </div>
       )}
     </AppShell>

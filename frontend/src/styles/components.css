@@ -403,21 +403,3 @@
   }
 }
 
-/* Single pulsing dot loader */
-.loader-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--violet-500);
-  animation: loader-pulse 1s var(--ease) infinite;
-}
-@keyframes loader-pulse {
-  0%, 100% {
-    transform: scale(0.7);
-    opacity: 0.5;
-  }
-  50% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}

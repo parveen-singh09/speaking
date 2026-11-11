@@ -25,7 +25,9 @@ public class DashboardController {
 	}
 
 	@GetMapping("/calls")
-	public List<CallSummary> recentCalls(@AuthenticationPrincipal Long userId) {
-		return dashboard.recentCalls(userId);
+	public List<CallSummary> recentCalls(
+			@AuthenticationPrincipal Long userId,
+			@org.springframework.web.bind.annotation.RequestParam(defaultValue = "10") int limit) {
+		return dashboard.recentCalls(userId, limit);
 	}
 }

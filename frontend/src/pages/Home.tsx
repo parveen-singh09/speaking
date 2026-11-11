@@ -3,9 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { fetchMe, type Me } from '../lib/auth'
 import { fetchRecentCalls, fetchOnlineCount, type CallSummary } from '../lib/dashboard'
 import { connectWs } from '../lib/ws'
-import { useCall } from '../hooks/useCall'
+import { useCallContext } from '../components/CallProvider'
 import { AppShell } from '../components/AppShell'
-import { CallScreen } from '../components/CallScreen'
 import { Icon } from '../components/icons'
 
 function formatDuration(sec: number): string {
@@ -82,7 +81,7 @@ export function Home() {
     return () => clearInterval(id)
   }, [onlineCount])
 
-  const call = useCall(me?.id ?? 0)
+  const call = useCallContext()
 
   // When a call ends (status returns to idle after being active), refresh the
   // recent-calls list so the just-finished call appears without a page reload.
@@ -103,7 +102,11 @@ export function Home() {
     return (
       <AppShell>
         <div className="shell-loading" aria-busy="true" aria-label="Loading">
-          <span className="loader-dot" />
+          <span className="dots">
+            <span />
+            <span />
+            <span />
+          </span>
         </div>
       </AppShell>
     )
@@ -167,11 +170,22 @@ export function Home() {
             No calls yet. Start a call to begin your first conversation.
           </div>
         ) : (
-          calls.map((c) => (
+          calls.slice(0, 3).map((c) => (
             <div className="feed-row" key={c.id}>
-              <span className="feed-ico">
-                <Icon name="phone" size={16} />
-              </span>
+              <button
+                type="button"
+                className="feed-avatar-btn"
+                aria-label={`View ${c.partnerName ?? 'user'}'s profile`}
+                onClick={() => navigate(`/user/${c.partnerId}`)}
+              >
+                <img
+                  className="feed-avatar"
+                  src={c.partnerAvatarUrl ?? '/avatars/man1_adult.svg'}
+                  alt=""
+                  width={44}
+                  height={44}
+                />
+              </button>
               <span className="feed-main">
                 <span className="feed-name">{c.partnerName ?? `User ${c.partnerId}`}</span>
                 <span className="feed-time">{formatTime(c.startedAt)}</span>
@@ -183,9 +197,6 @@ export function Home() {
           ))
         )}
       </section>
-
-      {call.status !== 'idle' && <CallScreen call={call} />}
-      <audio ref={call.remoteAudioRef} autoPlay />
     </AppShell>
   )
 }

@@ -1,12 +1,16 @@
 package com.english.speaking.friend.service;
 
+import com.english.speaking.chat.model.Message;
+import com.english.speaking.chat.repository.MessageRepository;
 import com.english.speaking.friend.dto.FriendResponse;
 import com.english.speaking.friend.dto.UserSearchResult;
 import com.english.speaking.friend.model.Friendship;
 import com.english.speaking.friend.repository.FriendshipRepository;
 import com.english.speaking.user.model.User;
 import com.english.speaking.user.repository.UserRepository;
+import com.english.speaking.ws.presence.PresenceService;
 import java.util.List;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,10 +19,15 @@ public class FriendService {
 
 	private final FriendshipRepository friendships;
 	private final UserRepository users;
+	private final MessageRepository messages;
+	private final PresenceService presence;
 
-	public FriendService(FriendshipRepository friendships, UserRepository users) {
+	public FriendService(FriendshipRepository friendships, UserRepository users,
+			MessageRepository messages, PresenceService presence) {
 		this.friendships = friendships;
 		this.users = users;
+		this.messages = messages;
+		this.presence = presence;
 	}
 
 	@Transactional
@@ -52,10 +61,26 @@ public class FriendService {
 				.map(f -> {
 					Long otherId = f.getRequesterId().equals(userId)
 							? f.getAddresseeId() : f.getRequesterId();
-					return toResponse(f.getId(), otherId);
+					return toFriendResponse(userId, f.getId(), otherId);
 				})
 				.filter(r -> r != null)
 				.toList();
+	}
+
+	private FriendResponse toFriendResponse(Long userId, Long friendshipId, Long otherUserId) {
+		User other = users.findById(otherUserId).orElse(null);
+		if (other == null) {
+			return null;
+		}
+		boolean online = presence.isOnline(otherUserId);
+		long unread = messages.countBySenderIdAndRecipientIdAndReadAtIsNull(otherUserId, userId);
+		List<Message> latest = messages.findLatestBetween(userId, otherUserId, PageRequest.of(0, 1));
+		if (latest.isEmpty()) {
+			return FriendResponse.of(friendshipId, other, online, null, false, unread);
+		}
+		Message m = latest.get(0);
+		return FriendResponse.of(friendshipId, other, online, m.getBody(),
+				m.getSenderId().equals(userId), unread);
 	}
 
 	public List<UserSearchResult> search(Long userId, String query) {

@@ -9,6 +9,7 @@ export interface CallSummary {
   id: number
   partnerId: number
   partnerName: string | null
+  partnerAvatarUrl: string | null
   durationSec: number | null
   startedAt: string
 }
@@ -18,8 +19,10 @@ export async function fetchStats(): Promise<Stats> {
   return res.data
 }
 
-export async function fetchRecentCalls(): Promise<CallSummary[]> {
-  const res = await api.get<CallSummary[]>('/me/calls')
+export async function fetchRecentCalls(limit?: number): Promise<CallSummary[]> {
+  const res = await api.get<CallSummary[]>('/me/calls', {
+    params: limit ? { limit } : undefined,
+  })
   return res.data
 }
 

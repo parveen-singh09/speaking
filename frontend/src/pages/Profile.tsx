@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { fetchMe, updateProfile, type Me } from '../lib/auth'
 import { fetchStats, type Stats } from '../lib/dashboard'
 import { listFriends } from '../lib/friends'
@@ -31,6 +32,7 @@ export function Profile() {
   const [occupation, setOccupation] = useState('')
   const [location, setLocation] = useState('')
   const [status, setStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
+  const navigate = useNavigate()
 
   useEffect(() => {
     fetchMe()
@@ -67,7 +69,11 @@ export function Profile() {
     return (
       <AppShell>
         <div className="shell-loading" aria-busy="true" aria-label="Loading">
-          <span className="loader-dot" />
+          <span className="dots">
+            <span />
+            <span />
+            <span />
+          </span>
         </div>
       </AppShell>
     )
@@ -92,13 +98,17 @@ export function Profile() {
       </section>
 
       <div className="stat-row profile-stats">
-        <div className="card stat-card">
+        <button
+          type="button"
+          className="card stat-card stat-card-btn"
+          onClick={() => navigate('/calls')}
+        >
           <span className="stat-ico">
             <Icon name="phone" size={18} />
           </span>
           <span className="stat-num">{stats?.totalCalls ?? 0}</span>
-          <span className="stat-label">Calls</span>
-        </div>
+          <span className="stat-label">Calls ›</span>
+        </button>
         <div className="card stat-card">
           <span className="stat-ico">
             <Icon name="clock" size={18} />

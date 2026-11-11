@@ -117,3 +117,53 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
 }
+
+/* Friend (public) profile */
+.fp-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  padding: 8px 12px 8px 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  border-radius: var(--radius-pill);
+  transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+}
+.fp-back:hover {
+  background: var(--violet-050);
+  color: var(--violet-700);
+}
+.fp-presence {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 3px solid var(--surface);
+}
+.fp-presence.online {
+  background: var(--live);
+}
+.fp-presence.offline {
+  background: #cfcad9;
+}
+.fp-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.fp-bio {
+  margin-bottom: 14px;
+}
+.fp-bio h2 {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+.fp-bio p {
+  color: var(--ink-soft);
+  line-height: 1.6;
+}

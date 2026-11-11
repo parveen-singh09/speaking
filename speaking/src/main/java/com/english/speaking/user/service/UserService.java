@@ -1,9 +1,13 @@
 package com.english.speaking.user.service;
 
+import com.english.speaking.call.repository.UserStatsRepository;
+import com.english.speaking.friend.repository.FriendshipRepository;
 import com.english.speaking.user.dto.OnboardingRequest;
+import com.english.speaking.user.dto.PublicProfileResponse;
 import com.english.speaking.user.dto.UpdateProfileRequest;
 import com.english.speaking.user.dto.UserResponse;
 import com.english.speaking.user.repository.UserRepository;
+import com.english.speaking.ws.presence.PresenceService;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,13 +16,36 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
 	private final UserRepository users;
+	private final UserStatsRepository stats;
+	private final FriendshipRepository friendships;
+	private final PresenceService presence;
 
-	public UserService(UserRepository users) {
+	public UserService(UserRepository users, UserStatsRepository stats,
+			FriendshipRepository friendships, PresenceService presence) {
 		this.users = users;
+		this.stats = stats;
+		this.friendships = friendships;
+		this.presence = presence;
 	}
 
 	public Optional<UserResponse> getById(Long id) {
 		return users.findById(id).map(UserResponse::from);
+	}
+
+	// A friend's public profile: identity + stats + friend count. Friends only.
+	public Optional<PublicProfileResponse> publicProfile(Long viewerId, Long targetId) {
+		if (!viewerId.equals(targetId) && !friendships.areFriends(viewerId, targetId)) {
+			return Optional.empty();
+		}
+		return users.findById(targetId).map(u -> {
+			var s = stats.findById(targetId).orElse(null);
+			long totalCalls = s != null ? s.getTotalCalls() : 0;
+			long totalSec = s != null ? s.getTotalCallSec() : 0;
+			long friendCount = friendships.countAcceptedForUser(targetId);
+			return new PublicProfileResponse(u.getId(), u.getName(), u.getAvatarUrl(),
+					u.getBio(), u.getEnglishLevel(), u.getOccupation(), u.getLocation(),
+					presence.isOnline(targetId), totalCalls, totalSec, friendCount);
+		});
 	}
 
 	@Transactional

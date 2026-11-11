@@ -64,6 +64,25 @@ export async function completeOnboarding(data: OnboardingData): Promise<Me> {
   return res.data
 }
 
+export interface PublicProfile {
+  userId: number
+  name: string | null
+  avatarUrl: string | null
+  bio: string | null
+  englishLevel: string | null
+  occupation: string | null
+  location: string | null
+  online: boolean
+  totalCalls: number
+  totalCallSec: number
+  friends: number
+}
+
+export async function fetchPublicProfile(userId: number): Promise<PublicProfile> {
+  const res = await api.get<PublicProfile>(`/users/${userId}/profile`)
+  return res.data
+}
+
 export async function refreshAccessToken(): Promise<string | null> {
   const refreshToken = useAuth.getState().refreshToken
   if (!refreshToken) {

@@ -104,7 +104,66 @@ export function CallScreen({ call }: CallScreenProps) {
         </button>
       </div>
     )
-  } else if (call.status === 'matched' || call.status === 'calling' || call.status === 'ringing') {
+  } else if (call.status === 'ringing') {
+    content = (
+      <div className="callscreen" role="dialog" aria-label="Incoming call">
+        <div className="cs-top">
+          <span className="cs-avatar-ring cs-avatar-ring-pulse">
+            <img src={partner?.avatarUrl ?? '/avatars/man1_adult.svg'} alt="" />
+          </span>
+          <span className="cs-name">{name}</span>
+          <span className="cs-incoming-label">Incoming call…</span>
+        </div>
+        <div className="cs-incoming-actions">
+          <button
+            type="button"
+            className="cs-answer decline"
+            aria-label="Decline"
+            onClick={call.hangup}
+          >
+            <Icon name="phone" size={26} />
+          </button>
+          <button
+            type="button"
+            className="cs-answer accept"
+            aria-label="Accept"
+            onClick={call.acceptCall}
+          >
+            <Icon name="phone" size={26} />
+          </button>
+        </div>
+      </div>
+    )
+  } else if (call.mode === 'direct' && call.status !== 'connected') {
+    content = (
+      <div className="callscreen" role="dialog" aria-label="Calling">
+        <div className="cs-top">
+          <span className="cs-avatar-ring cs-avatar-ring-pulse">
+            <img src={partner?.avatarUrl ?? '/avatars/man1_adult.svg'} alt="" />
+          </span>
+          <span className="cs-name">{name}</span>
+          <span className="cs-establishing">
+            <span className="dots">
+              <span />
+              <span />
+              <span />
+            </span>
+            Calling…
+          </span>
+        </div>
+        <div className="cs-foot">
+          <button
+            type="button"
+            className="cs-answer decline"
+            aria-label="Cancel call"
+            onClick={call.hangup}
+          >
+            <Icon name="phone" size={26} />
+          </button>
+        </div>
+      </div>
+    )
+  } else if (call.status === 'matched' || call.status === 'calling') {
     content = (
       <div className="callscreen" role="dialog" aria-label="Partner found">
         <div className="cs-top">
@@ -136,7 +195,7 @@ export function CallScreen({ call }: CallScreenProps) {
       <div className="callscreen" role="dialog" aria-label="On a call">
         <div className="cs-body">
         <div className="cs-identity">
-          <span className="cs-avatar-ring">
+          <span className="cs-avatar-ring cs-avatar-glow">
             <img src={partner?.avatarUrl ?? '/avatars/man1_adult.svg'} alt="" />
           </span>
           <span className="cs-name">{name}</span>

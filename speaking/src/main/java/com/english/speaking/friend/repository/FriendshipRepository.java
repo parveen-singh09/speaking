@@ -21,4 +21,8 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
 			+ "(f.requesterId = :a and f.addresseeId = :b) or "
 			+ "(f.requesterId = :b and f.addresseeId = :a))")
 	boolean areFriends(@Param("a") Long a, @Param("b") Long b);
+
+	@Query("select count(f) from Friendship f where f.status = 'accepted' "
+			+ "and (f.requesterId = :userId or f.addresseeId = :userId)")
+	long countAcceptedForUser(@Param("userId") Long userId);
 }

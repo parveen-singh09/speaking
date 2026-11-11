@@ -91,6 +91,33 @@
 .tab:hover {
   color: var(--violet-500);
 }
+.tab-icon {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+}
+
+/* Red count badge for nav items */
+.nav-badge {
+  display: grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  background: var(--danger);
+  border-radius: var(--radius-pill);
+}
+.nav-badge-dot {
+  position: absolute;
+  top: -5px;
+  right: -8px;
+  border: 2px solid var(--surface);
+}
 
 .shell-loading {
   display: grid;
@@ -141,6 +168,16 @@
   .rail-link.active {
     background: var(--violet-100);
     color: var(--violet-700);
+  }
+  .rail-link .nav-badge {
+    margin-left: auto;
+  }
+  .rail-logout {
+    color: var(--danger);
+  }
+  .rail-logout:hover {
+    color: var(--danger);
+    background: var(--danger-soft);
   }
   .rail-spacer {
     flex: 1;

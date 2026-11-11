@@ -6,6 +6,12 @@ export interface Friend {
   name: string | null
   avatarUrl: string | null
   englishLevel: string | null
+  bio?: string | null
+  location?: string | null
+  online?: boolean
+  lastMessage?: string | null
+  lastMessageFromMe?: boolean
+  unread?: number
 }
 
 export async function listFriends(): Promise<Friend[]> {

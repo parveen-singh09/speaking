@@ -1,7 +1,8 @@
-import type { ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../store/auth'
 import { disconnectWs } from '../lib/ws'
+import { listPending, listFriends } from '../lib/friends'
 import { Icon } from './icons'
 
 interface AppShellProps {
@@ -18,6 +19,17 @@ export function AppShell({ children }: AppShellProps) {
   const navigate = useNavigate()
   const location = useLocation()
   const clear = useAuth((s) => s.clear)
+  const [friendsBadge, setFriendsBadge] = useState(0)
+
+  // Friends badge = pending friend requests + total unread messages.
+  useEffect(() => {
+    Promise.all([listPending().catch(() => []), listFriends().catch(() => [])])
+      .then(([pending, friends]) => {
+        const unread = friends.reduce((sum, f) => sum + (f.unread ?? 0), 0)
+        setFriendsBadge(pending.length + unread)
+      })
+      .catch(() => {})
+  }, [location.pathname])
 
   const handleLogout = () => {
     disconnectWs()
@@ -26,6 +38,7 @@ export function AppShell({ children }: AppShellProps) {
   }
 
   const isActive = (path: string) => location.pathname === path
+  const badgeFor = (path: string) => (path === '/friends' ? friendsBadge : 0)
 
   return (
     <div className="shell">
@@ -45,10 +58,11 @@ export function AppShell({ children }: AppShellProps) {
           >
             <Icon name={item.icon} />
             {item.label}
+            {badgeFor(item.path) > 0 && <span className="nav-badge">{badgeFor(item.path)}</span>}
           </button>
         ))}
         <span className="rail-spacer" />
-        <button type="button" className="rail-link" onClick={handleLogout}>
+        <button type="button" className="rail-link rail-logout" onClick={handleLogout}>
           <Icon name="logout" />
           Log out
         </button>
@@ -65,7 +79,12 @@ export function AppShell({ children }: AppShellProps) {
             aria-current={isActive(item.path) ? 'page' : undefined}
             onClick={() => navigate(item.path)}
           >
-            <Icon name={item.icon} size={22} />
+            <span className="tab-icon">
+              <Icon name={item.icon} size={22} />
+              {badgeFor(item.path) > 0 && (
+                <span className="nav-badge nav-badge-dot">{badgeFor(item.path)}</span>
+              )}
+            </span>
             {item.label}
           </button>
         ))}

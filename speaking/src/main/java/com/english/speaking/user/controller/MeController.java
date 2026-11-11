@@ -1,6 +1,7 @@
 package com.english.speaking.user.controller;
 
 import com.english.speaking.user.dto.OnboardingRequest;
+import com.english.speaking.user.dto.PublicProfileResponse;
 import com.english.speaking.user.dto.UpdateProfileRequest;
 import com.english.speaking.user.dto.UserResponse;
 import com.english.speaking.user.service.UserService;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +27,15 @@ public class MeController {
 	@GetMapping("/me")
 	public ResponseEntity<UserResponse> me(@AuthenticationPrincipal Long userId) {
 		return userService.getById(userId)
+				.map(ResponseEntity::ok)
+				.orElseGet(() -> ResponseEntity.notFound().build());
+	}
+
+	@GetMapping("/users/{id}/profile")
+	public ResponseEntity<PublicProfileResponse> publicProfile(
+			@AuthenticationPrincipal Long userId,
+			@PathVariable Long id) {
+		return userService.publicProfile(userId, id)
 				.map(ResponseEntity::ok)
 				.orElseGet(() -> ResponseEntity.notFound().build());
 	}

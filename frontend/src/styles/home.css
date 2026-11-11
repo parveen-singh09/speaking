@@ -214,29 +214,35 @@
   border: 1px solid var(--border);
   margin-bottom: 8px;
 }
-.feed-ico {
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
+.feed-avatar-btn {
   flex: none;
   border-radius: var(--radius-pill);
-  color: var(--violet-600);
+}
+.feed-avatar {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: var(--radius-pill);
   background: var(--violet-100);
 }
 .feed-main {
   flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 .feed-name {
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1rem;
   color: var(--ink);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .feed-time {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--ink-faint);
 }
 .feed-dur {
@@ -258,4 +264,14 @@
 .profile-stats {
   margin-top: 16px;
   margin-bottom: 20px;
+}
+.stat-card-btn {
+  width: 100%;
+  transition: transform var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
+}
+.stat-card-btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--violet-200);
+  box-shadow: var(--shadow);
 }

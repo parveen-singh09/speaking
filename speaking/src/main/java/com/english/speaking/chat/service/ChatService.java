@@ -43,10 +43,13 @@ public class ChatService {
 		push(senderId, saved);
 	}
 
+	@Transactional
 	public List<MessageResponse> history(Long userId, Long friendId) {
 		if (!friendships.areFriends(userId, friendId)) {
 			return List.of();
 		}
+		// Opening the conversation marks the friend's messages to me as read.
+		messages.markConversationRead(userId, friendId, OffsetDateTime.now());
 		return messages.findConversation(userId, friendId).stream()
 				.map(MessageResponse::from)
 				.toList();

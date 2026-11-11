@@ -30,13 +30,20 @@ public class DashboardService {
 	}
 
 	public List<CallSummary> recentCalls(Long userId) {
-		return calls.findRecentForUser(userId, PageRequest.of(0, 10)).stream()
-				.map(call -> CallSummary.of(call, userId, partnerName(call, userId)))
-				.toList();
+		return recentCalls(userId, 10);
 	}
 
-	private String partnerName(Call call, Long me) {
-		Long partnerId = call.getCallerId().equals(me) ? call.getCalleeId() : call.getCallerId();
-		return users.findById(partnerId).map(u -> u.getName()).orElse(null);
+	public List<CallSummary> recentCalls(Long userId, int limit) {
+		int capped = Math.max(1, Math.min(limit, 200));
+		return calls.findRecentForUser(userId, PageRequest.of(0, capped)).stream()
+				.map(call -> {
+					Long partnerId = call.getCallerId().equals(userId)
+							? call.getCalleeId() : call.getCallerId();
+					var partner = users.findById(partnerId).orElse(null);
+					String name = partner != null ? partner.getName() : null;
+					String avatarUrl = partner != null ? partner.getAvatarUrl() : null;
+					return CallSummary.of(call, userId, name, avatarUrl);
+				})
+				.toList();
 	}
 }

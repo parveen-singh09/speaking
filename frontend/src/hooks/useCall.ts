@@ -43,6 +43,7 @@ export interface PartnerInfo {
 
 export function useCall(myId: number) {
   const [status, setStatus] = useState<CallStatus>('idle')
+  const [mode, setMode] = useState<'match' | 'direct'>('match')
   const [peerId, setPeerId] = useState<string | null>(null)
   const [partner, setPartner] = useState<PartnerInfo | null>(null)
   const [connectedSec, setConnectedSec] = useState(0)
@@ -145,9 +146,20 @@ export function useCall(myId: number) {
   }, [peerId, answerOffer])
 
   const findPartner = useCallback(() => {
+    setMode('match')
     setStatus('searching')
     sendWs({ type: 'match.find' })
   }, [])
+
+  const callPeer = useCallback(
+    (targetId: string, info: PartnerInfo) => {
+      setMode('direct')
+      setPeerId(targetId)
+      setPartner(info)
+      startCall(targetId)
+    },
+    [startCall],
+  )
 
   const cancelFind = useCallback(() => {
     sendWs({ type: 'match.cancel' })
@@ -246,6 +258,8 @@ export function useCall(myId: number) {
           autoAccept.current = false
           await answerOffer(p.from, p.sdp)
         } else {
+          // A cold offer with no prior match.found is an incoming direct call.
+          setMode('direct')
           setStatus('ringing')
         }
       } else if (env.type === 'call.answer') {
@@ -271,6 +285,7 @@ export function useCall(myId: number) {
 
   return {
     status,
+    mode,
     peerId,
     partner,
     connectedSec,
@@ -278,10 +293,12 @@ export function useCall(myId: number) {
     speakerMuted,
     remoteAudioRef,
     findPartner,
+    callPeer,
     cancelFind,
     acceptCall,
     hangup,
     toggleMic,
     toggleSpeaker,
+    setPartner,
   }
 }

@@ -4,13 +4,17 @@ import { Home } from './pages/Home'
 import { Profile } from './pages/Profile'
 import { Friends } from './pages/Friends'
 import { Chat } from './pages/Chat'
+import { FriendProfile } from './pages/FriendProfile'
+import { CallHistory } from './pages/CallHistory'
 import { Onboarding } from './pages/Onboarding'
 import { NotFound } from './pages/NotFound'
 import { ProtectedRoute } from './components/ProtectedRoute'
+import { CallProvider } from './components/CallProvider'
 
 export function App() {
   return (
-    <Routes>
+    <CallProvider>
+      <Routes>
       <Route path="/" element={<Landing />} />
       <Route
         path="/home"
@@ -45,6 +49,22 @@ export function App() {
         }
       />
       <Route
+        path="/user/:userId"
+        element={
+          <ProtectedRoute>
+            <FriendProfile />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/calls"
+        element={
+          <ProtectedRoute>
+            <CallHistory />
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/onboarding"
         element={
           <ProtectedRoute>
@@ -52,7 +72,8 @@ export function App() {
           </ProtectedRoute>
         }
       />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </CallProvider>
   )
 }
