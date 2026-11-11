@@ -7,7 +7,6 @@
   margin-bottom: 18px;
 }
 
-/* Floating-peers matchmaking hero (maps to findPartner) */
 .peer-hero {
   position: relative;
   overflow: hidden;
@@ -31,7 +30,6 @@
   color: #fff;
   font-size: 1.25rem;
 }
-/* Hide the hero kicker on mobile; keep the status badge pushed right. */
 @media (max-width: 639px) {
   .peer-hero-top {
     justify-content: flex-end;
@@ -80,7 +78,6 @@
   }
 }
 
-/* Floating avatar field */
 .peer-field {
   position: absolute;
   inset: 0;
@@ -123,7 +120,6 @@
   }
 }
 
-/* Primary call action pinned to the bottom of the hero */
 .peer-hero-action {
   position: relative;
   z-index: 3;
@@ -168,7 +164,6 @@
   background: rgba(255, 255, 255, 0.28);
 }
 
-/* Stat cards row */
 .stat-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -203,7 +198,6 @@
   color: var(--ink-soft);
 }
 
-/* Recent calls feed */
 .feed {
   margin-top: 22px;
 }

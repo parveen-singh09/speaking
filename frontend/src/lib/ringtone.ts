@@ -20,13 +20,11 @@ function ensureCtx(): AudioContext | null {
   }
 }
 
-// A gentle ascending bell/marimba chime, played as a short arpeggio.
-const CHIME_NOTES = [587.33, 739.99, 987.77, 1174.66] // D5, F#5, B5, D6
+const CHIME_NOTES = [587.33, 739.99, 987.77, 1174.66]
 
 function pluck(ac: AudioContext, freq: number, at: number) {
   const gain = ac.createGain()
   gain.connect(ac.destination)
-  // Fast attack, soft exponential decay — a bell-like pluck.
   gain.gain.setValueAtTime(0, at)
   gain.gain.linearRampToValueAtTime(0.16, at + 0.012)
   gain.gain.exponentialRampToValueAtTime(0.0008, at + 0.6)
@@ -35,7 +33,6 @@ function pluck(ac: AudioContext, freq: number, at: number) {
   osc.type = 'triangle'
   osc.frequency.value = freq
 
-  // A quiet higher partial adds a touch of shimmer.
   const partial = ac.createOscillator()
   partial.type = 'sine'
   partial.frequency.value = freq * 2

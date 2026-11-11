@@ -38,7 +38,6 @@ export function CallProvider({ children }: { children: ReactNode }) {
 
   const call = useCall(myId)
 
-  // Ring only while an incoming call is waiting to be answered.
   useEffect(() => {
     if (call.status === 'ringing') {
       startRingtone()
@@ -48,8 +47,6 @@ export function CallProvider({ children }: { children: ReactNode }) {
     return () => stopRingtone()
   }, [call.status])
 
-  // When a friend calls directly, the offer carries no profile. Resolve who is
-  // ringing from the friends list so the incoming screen shows their name/avatar.
   const resolvedFor = useRef<string | null>(null)
   useEffect(() => {
     if (call.status !== 'ringing' || !call.peerId) {

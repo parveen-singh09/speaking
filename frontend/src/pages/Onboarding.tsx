@@ -14,8 +14,6 @@ export function Onboarding() {
   const [avatarUrl, setAvatarUrl] = useState('')
   const [googlePhoto, setGooglePhoto] = useState<string | null>(null)
 
-  // A Google photo is saved to avatarUrl at login (an http URL, not a local
-  // /avatars SVG). Offer it as a choice before onboarding overwrites it.
   useEffect(() => {
     fetchMe()
       .then((m) => {

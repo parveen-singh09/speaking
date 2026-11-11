@@ -28,7 +28,6 @@ async function open() {
       const envelope = JSON.parse(event.data) as Envelope
       handlers.forEach((h) => h(envelope))
     } catch {
-      // ignore malformed frames
     }
   }
 

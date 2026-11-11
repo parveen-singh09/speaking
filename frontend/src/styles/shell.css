@@ -4,12 +4,10 @@
   grid-template-columns: 1fr;
 }
 
-/* Left rail (desktop) */
 .rail {
   display: none;
 }
 
-/* Top bar (all sizes) */
 .topbar {
   position: sticky;
   top: 0;
@@ -34,7 +32,6 @@
   gap: 8px;
 }
 
-/* Page container */
 .page {
   width: 100%;
   max-width: var(--page-max);
@@ -50,7 +47,6 @@
   margin-bottom: 20px;
 }
 
-/* Bottom tab bar (mobile) */
 .tabbar {
   position: fixed;
   left: 0;
@@ -97,7 +93,6 @@
   place-items: center;
 }
 
-/* Red count badge for nav items */
 .nav-badge {
   display: grid;
   place-items: center;

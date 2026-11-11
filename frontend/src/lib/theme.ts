@@ -18,7 +18,6 @@ export function setTheme(theme: Theme) {
   try {
     localStorage.setItem('theme', theme)
   } catch {
-    /* ignore */
   }
   listeners.forEach((cb) => cb())
 }

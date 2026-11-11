@@ -23,7 +23,6 @@ export function AppShell({ children }: AppShellProps) {
   const theme = useTheme()
   const [friendsBadge, setFriendsBadge] = useState(0)
 
-  // Friends badge = pending friend requests + total unread messages.
   const refreshBadge = useCallback(() => {
     Promise.all([listPending().catch(() => []), listFriends().catch(() => [])])
       .then(([pending, friends]) => {
@@ -33,12 +32,10 @@ export function AppShell({ children }: AppShellProps) {
       .catch(() => {})
   }, [])
 
-  // Refresh on navigation.
   useEffect(() => {
     refreshBadge()
   }, [location.pathname, refreshBadge])
 
-  // Refresh instantly when a message arrives over the WebSocket.
   useEffect(() => {
     return onWs((env: Envelope) => {
       if (env.type === 'chat.receive') {

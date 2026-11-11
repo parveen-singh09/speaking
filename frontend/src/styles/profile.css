@@ -47,7 +47,6 @@
   margin-top: 4px;
 }
 
-/* Info rows (icon chip + label + value), from reference profile */
 .info-list {
   display: flex;
   flex-direction: column;
@@ -120,7 +119,6 @@
 .profile-logout:hover {
   background: var(--danger-soft);
 }
-/* Theme + logout live in the desktop rail already; only show here on mobile. */
 @media (min-width: 900px) {
   .profile-foot {
     display: none;
@@ -135,7 +133,6 @@
   border-radius: var(--radius-sm);
 }
 
-/* Friend (public) profile */
 .fp-back {
   display: inline-flex;
   align-items: center;

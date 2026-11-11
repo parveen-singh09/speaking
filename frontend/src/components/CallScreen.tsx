@@ -41,7 +41,6 @@ export function CallScreen({ call }: CallScreenProps) {
     return () => clearInterval(id)
   }, [isSearching])
 
-  // No partner within the time limit: stop searching and return to Home.
   const cancelFindRef = useRef(call.cancelFind)
   cancelFindRef.current = call.cancelFind
   useEffect(() => {
@@ -50,8 +49,6 @@ export function CallScreen({ call }: CallScreenProps) {
     }
   }, [isSearching, searchSec])
 
-  // Intercept the browser Back button: keep the user on the call and ask
-  // first, instead of silently navigating away (which would drop the call).
   useEffect(() => {
     window.history.pushState({ peerupCall: true }, '')
     const onPop = () => {
@@ -261,9 +258,6 @@ export function CallScreen({ call }: CallScreenProps) {
       {confirmEnd && (
         <div className="cs-confirm" role="dialog" aria-modal="true" aria-label="End call">
           <div className="cs-confirm-card">
-            <span className="cs-confirm-ico">
-              <Icon name="phone" size={24} />
-            </span>
             {isSearching ? (
               <>
                 <h2>Stop searching?</h2>
@@ -304,7 +298,6 @@ function HighFive() {
       strokeLinejoin="round"
       aria-hidden="true"
     >
-      {/* Left figure */}
       <path
         d="M30 162C30 110 44 98 60 98C76 98 90 110 90 162Z"
         fill="var(--violet-400)"
@@ -315,7 +308,6 @@ function HighFive() {
       <path d="M74 104L103 54" stroke="var(--violet-500)" strokeWidth="16" />
       <circle cx="104" cy="50" r="12" fill="var(--violet-400)" stroke="var(--violet-600)" strokeWidth="5" />
 
-      {/* Right figure */}
       <path
         d="M190 162C190 110 176 98 160 98C144 98 130 110 130 162Z"
         fill="var(--violet-400)"
@@ -326,13 +318,11 @@ function HighFive() {
       <path d="M146 104L117 54" stroke="var(--violet-500)" strokeWidth="16" />
       <circle cx="116" cy="50" r="12" fill="var(--violet-400)" stroke="var(--violet-600)" strokeWidth="5" />
 
-      {/* Happy faces */}
       <g fill="none" stroke="var(--violet-700)" strokeWidth="3">
         <path d="M51 64q4-4 8 0M61 64q4-4 8 0M54 74q6 5 12 0" />
         <path d="M151 64q4-4 8 0M161 64q4-4 8 0M154 74q6 5 12 0" />
       </g>
 
-      {/* Spark where palms meet */}
       <g stroke="var(--gold)" strokeWidth="3">
         <path d="M110 30v-9M110 70v2M98 44l-6-5M122 44l6-5" />
       </g>

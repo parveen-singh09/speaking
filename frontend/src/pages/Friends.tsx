@@ -51,7 +51,6 @@ export function Friends() {
       await sendFriendRequest(userId)
       setSentTo((prev) => new Set(prev).add(userId))
     } catch {
-      // ignore; button stays available to retry
     }
   }
 

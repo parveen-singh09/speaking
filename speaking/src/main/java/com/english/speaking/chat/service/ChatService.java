@@ -48,7 +48,6 @@ public class ChatService {
 		if (!friendships.areFriends(userId, friendId)) {
 			return List.of();
 		}
-		// Opening the conversation marks the friend's messages to me as read.
 		messages.markConversationRead(userId, friendId, OffsetDateTime.now());
 		return messages.findConversation(userId, friendId).stream()
 				.map(MessageResponse::from)

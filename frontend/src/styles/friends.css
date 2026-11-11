@@ -56,7 +56,6 @@
   flex: none;
 }
 
-/* Friend cards grid */
 .friend-list {
   display: flex;
   flex-direction: column;

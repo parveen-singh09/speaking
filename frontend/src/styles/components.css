@@ -1,4 +1,3 @@
-/* Wordmark */
 .wordmark {
   font-family: var(--font-display);
   font-weight: 600;
@@ -10,7 +9,6 @@
   color: var(--violet-600);
 }
 
-/* Buttons */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -41,7 +39,6 @@
 .btn-primary:not(:disabled):active {
   transform: translateY(0);
 }
-/* The violet glow blooms against dark surfaces; use a plain soft shadow instead. */
 :root[data-theme="dark"] .btn-primary {
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
 }
@@ -88,7 +85,6 @@
   font-size: 1.08rem;
 }
 
-/* Icon button */
 .icon-btn {
   display: inline-grid;
   place-items: center;
@@ -107,7 +103,6 @@
   transform: translateY(-1px);
 }
 
-/* Card surface */
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -118,7 +113,6 @@
   padding: 20px;
 }
 
-/* Section heading, playful condensed look from references */
 .kicker {
   font-family: var(--font-display);
   font-weight: 600;
@@ -128,7 +122,6 @@
   text-transform: uppercase;
 }
 
-/* Inputs */
 .field {
   display: flex;
   flex-direction: column;
@@ -175,7 +168,6 @@
   background: var(--surface);
 }
 
-/* Custom dropdown */
 .dd {
   position: relative;
   width: 100%;
@@ -301,7 +293,6 @@
   min-height: 92px;
 }
 
-/* Chips / pills */
 .chip {
   display: inline-flex;
   align-items: center;
@@ -327,7 +318,6 @@
   background: var(--gold-soft);
 }
 
-/* Avatars */
 .avatar {
   border-radius: var(--radius-pill);
   object-fit: cover;
@@ -342,7 +332,6 @@
   border: 2px solid var(--surface);
 }
 
-/* Status + feedback text */
 .hint {
   font-size: 0.86rem;
   color: var(--ink-soft);
@@ -358,7 +347,6 @@
   font-size: 0.88rem;
 }
 
-/* Divider with label */
 .divider {
   display: flex;
   align-items: center;
@@ -374,14 +362,12 @@
   background: var(--border-strong);
 }
 
-/* Empty state */
 .empty {
   padding: 28px 18px;
   text-align: center;
   color: var(--ink-soft);
 }
 
-/* Spinner dots */
 .dots {
   display: inline-flex;
   gap: 5px;

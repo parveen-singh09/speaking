@@ -71,7 +71,6 @@
   border-radius: var(--radius-sm);
 }
 
-/* Decorative floating peers on the aside (desktop) */
 .landing-visual {
   position: relative;
   width: 100%;

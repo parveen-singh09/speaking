@@ -215,12 +215,10 @@ export function useCall(myId: number) {
     if (!peerId) {
       return
     }
-    // Warn before a reload / tab close interrupts the call (native prompt).
     const onBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault()
       e.returnValue = ''
     }
-    // Fires only when the page is actually torn down: tell the partner we left.
     const onPageHide = () => {
       sendWs({ type: 'call.hangup', to: peerId, payload: { from: String(myId) } })
     }
@@ -258,7 +256,6 @@ export function useCall(myId: number) {
           autoAccept.current = false
           await answerOffer(p.from, p.sdp)
         } else {
-          // A cold offer with no prior match.found is an incoming direct call.
           setMode('direct')
           setStatus('ringing')
         }

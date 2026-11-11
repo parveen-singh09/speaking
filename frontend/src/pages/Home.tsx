@@ -61,7 +61,6 @@ export function Home() {
       .catch(() => {})
   }, [navigate])
 
-  // Poll the real online count (Redis presence) every 15s.
   useEffect(() => {
     if (!me) {
       return
@@ -72,7 +71,6 @@ export function Home() {
     return () => clearInterval(id)
   }, [me])
 
-  // Alternate the badge between "Live matching" and the online count every 3s.
   useEffect(() => {
     if (onlineCount == null) {
       return
@@ -83,12 +81,9 @@ export function Home() {
 
   const call = useCallContext()
 
-  // When a call ends (status returns to idle after being active), refresh the
-  // recent-calls list so the just-finished call appears without a page reload.
   const prevStatus = useRef(call.status)
   useEffect(() => {
     if (prevStatus.current !== 'idle' && call.status === 'idle') {
-      // Small delay so the backend has committed the call record first.
       const t = setTimeout(() => {
         fetchRecentCalls().then(setCalls).catch(() => {})
       }, 600)

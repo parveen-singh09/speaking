@@ -32,7 +32,6 @@ public class UserService {
 		return users.findById(id).map(UserResponse::from);
 	}
 
-	// A friend's public profile: identity + stats + friend count. Friends only.
 	public Optional<PublicProfileResponse> publicProfile(Long viewerId, Long targetId) {
 		if (!viewerId.equals(targetId) && !friendships.areFriends(viewerId, targetId)) {
 			return Optional.empty();
