@@ -127,21 +127,6 @@
   border-radius: var(--radius-pill);
   background: var(--violet-100);
 }
-.presence-dot {
-  position: absolute;
-  right: -1px;
-  bottom: -1px;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  border: 2.5px solid var(--surface);
-}
-.presence-dot.online {
-  background: var(--live);
-}
-.presence-dot.offline {
-  background: #cfcad9;
-}
 .friend-row-main {
   flex: 1;
   min-width: 0;

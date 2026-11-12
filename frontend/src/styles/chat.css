@@ -43,15 +43,6 @@
   border-radius: var(--radius-pill);
   background: var(--violet-100);
 }
-.chat-head-avatar-wrap .presence-dot {
-  position: absolute;
-  right: -1px;
-  bottom: -1px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  border: 2.5px solid var(--surface);
-}
 .chat-head-text {
   display: flex;
   flex-direction: column;

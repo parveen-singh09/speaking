@@ -178,21 +178,6 @@
   background: var(--violet-050);
   color: var(--violet-700);
 }
-.fp-presence {
-  position: absolute;
-  right: 4px;
-  bottom: 4px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  border: 3px solid var(--surface);
-}
-.fp-presence.online {
-  background: var(--live);
-}
-.fp-presence.offline {
-  background: #cfcad9;
-}
 .fp-actions {
   display: flex;
   gap: 10px;
