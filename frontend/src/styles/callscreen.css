@@ -337,6 +337,12 @@
   transform: translateY(-2px);
   box-shadow: 0 16px 34px rgba(225, 29, 72, 0.5);
 }
+:root[data-theme="dark"] .cs-hangup {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+:root[data-theme="dark"] .cs-hangup:hover {
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.5);
+}
 
 .cs-confirm {
   position: fixed;
