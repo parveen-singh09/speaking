@@ -56,8 +56,13 @@ export function useCall(myId: number) {
   const pendingIce = useRef<RTCIceCandidateInit[]>([])
   const incomingOffer = useRef<RTCSessionDescriptionInit | null>(null)
   const autoAccept = useRef(false)
+  const disconnectTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const cleanup = useCallback(() => {
+    if (disconnectTimer.current) {
+      clearTimeout(disconnectTimer.current)
+      disconnectTimer.current = null
+    }
     pcRef.current?.close()
     pcRef.current = null
     localRef.current?.getTracks().forEach((t) => t.stop())
@@ -92,10 +97,24 @@ export function useCall(myId: number) {
         }
       }
       pc.onconnectionstatechange = () => {
-        if (pc.connectionState === 'connected') {
+        const state = pc.connectionState
+        if (state === 'connected') {
+          if (disconnectTimer.current) {
+            clearTimeout(disconnectTimer.current)
+            disconnectTimer.current = null
+          }
           setStatus('connected')
-        } else if (['disconnected', 'failed', 'closed'].includes(pc.connectionState)) {
+        } else if (state === 'failed' || state === 'closed') {
           cleanup()
+        } else if (state === 'disconnected') {
+          if (disconnectTimer.current) {
+            clearTimeout(disconnectTimer.current)
+          }
+          disconnectTimer.current = setTimeout(() => {
+            if (pcRef.current?.connectionState === 'disconnected') {
+              cleanup()
+            }
+          }, 8000)
         }
       }
       pcRef.current = pc
