@@ -27,7 +27,7 @@ export function CallScreen({ call }: CallScreenProps) {
 
   const isSearching = call.status === 'searching'
   const partner = call.partner
-  const name = partner?.name ?? `Partner ${call.peerId ?? ''}`.trim()
+  const name = partner?.name ?? 'Speaking partner'
   const level = titleCase(partner?.englishLevel ?? null)
 
   useEffect(() => {

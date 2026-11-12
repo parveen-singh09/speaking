@@ -58,7 +58,7 @@ export function FriendProfile() {
     )
   }
 
-  const name = profile.name ?? `User ${profile.userId}`
+  const name = profile.name ?? 'Speaking partner'
   const startCall = () => {
     call.callPeer(String(profile.userId), {
       name: profile.name,

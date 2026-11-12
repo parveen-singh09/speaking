@@ -33,9 +33,13 @@ export function Friends() {
   const [results, setResults] = useState<UserSearchResult[]>([])
   const [searching, setSearching] = useState(false)
   const [sentTo, setSentTo] = useState<Set<number>>(new Set())
+  const [loaded, setLoaded] = useState(false)
 
   const load = () => {
-    listFriends().then(setFriends).catch(() => {})
+    listFriends()
+      .then(setFriends)
+      .catch(() => {})
+      .finally(() => setLoaded(true))
     listPending().then(setPending).catch(() => {})
   }
 
@@ -193,7 +197,15 @@ export function Friends() {
       <div className="section-head">
         <h2>Your friends</h2>
       </div>
-      {friends.length === 0 ? (
+      {!loaded ? (
+        <div className="shell-loading" aria-busy="true" aria-label="Loading">
+          <span className="dots">
+            <span />
+            <span />
+            <span />
+          </span>
+        </div>
+      ) : friends.length === 0 ? (
         <div className="card empty">No friends yet. Search above to find people.</div>
       ) : (
         <div className="friend-list">
