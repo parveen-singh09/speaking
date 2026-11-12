@@ -32,8 +32,18 @@ export interface UserSearchResult {
   location: string | null
 }
 
-export async function searchUsers(q: string): Promise<UserSearchResult[]> {
-  const res = await api.get<UserSearchResult[]>('/friends/search', { params: { q } })
+export interface SearchFilters {
+  q?: string
+  location?: string
+  level?: string
+}
+
+export async function searchUsers(filters: SearchFilters): Promise<UserSearchResult[]> {
+  const params: Record<string, string> = {}
+  if (filters.q) params.q = filters.q
+  if (filters.location) params.location = filters.location
+  if (filters.level) params.level = filters.level
+  const res = await api.get<UserSearchResult[]>('/friends/search', { params })
   return res.data
 }
 

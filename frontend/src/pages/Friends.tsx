@@ -9,9 +9,18 @@ import {
   type Friend,
   type UserSearchResult,
 } from '../lib/friends'
+import { COUNTRIES } from '../lib/onboarding-data'
 import { AppShell } from '../components/AppShell'
+import { Select } from '../components/Select'
 import { useCallContext } from '../components/CallProvider'
 import { Icon } from '../components/icons'
+
+const LEVEL_OPTIONS = [
+  { value: 'beginner', label: 'Beginner' },
+  { value: 'intermediate', label: 'Intermediate' },
+  { value: 'advanced', label: 'Advanced' },
+  { value: 'fluent', label: 'Fluent' },
+]
 
 export function Friends() {
   const navigate = useNavigate()
@@ -19,6 +28,8 @@ export function Friends() {
   const [friends, setFriends] = useState<Friend[]>([])
   const [pending, setPending] = useState<Friend[]>([])
   const [query, setQuery] = useState('')
+  const [filterLocation, setFilterLocation] = useState('')
+  const [filterLevel, setFilterLevel] = useState('')
   const [results, setResults] = useState<UserSearchResult[]>([])
   const [searching, setSearching] = useState(false)
   const [sentTo, setSentTo] = useState<Set<number>>(new Set())
@@ -32,19 +43,25 @@ export function Friends() {
 
   useEffect(() => {
     const q = query.trim()
-    if (q.length < 2) {
+    const hasName = q.length >= 2
+    const active = hasName || !!filterLocation || !!filterLevel
+    if (!active) {
       setResults([])
       return
     }
     setSearching(true)
     const t = setTimeout(() => {
-      searchUsers(q)
+      searchUsers({
+        q: hasName ? q : undefined,
+        location: filterLocation || undefined,
+        level: filterLevel || undefined,
+      })
         .then(setResults)
         .catch(() => setResults([]))
         .finally(() => setSearching(false))
     }, 300)
     return () => clearTimeout(t)
-  }, [query])
+  }, [query, filterLocation, filterLevel])
 
   const send = async (userId: number) => {
     try {
@@ -67,19 +84,34 @@ export function Friends() {
       <p className="page-sub">Find people to practise with and keep the conversation going.</p>
 
       <section className="friends-search">
-        <input
-          className="input"
-          type="text"
-          placeholder="Search people by name…"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          aria-label="Search people by name"
-        />
-        {query.trim().length >= 2 && (
+        <div className="friends-filters">
+          <input
+            className="input friends-filter-name"
+            type="text"
+            placeholder="Search by name…"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            aria-label="Search people by name"
+          />
+          <Select
+            value={filterLevel}
+            options={[{ value: '', label: 'Any level' }, ...LEVEL_OPTIONS]}
+            placeholder="Any level"
+            onChange={setFilterLevel}
+          />
+          <Select
+            value={filterLocation}
+            options={[{ value: '', label: 'Any country' }, ...COUNTRIES.map((c) => ({ value: c, label: c }))]}
+            placeholder="Any country"
+            searchable
+            onChange={setFilterLocation}
+          />
+        </div>
+        {(query.trim().length >= 2 || filterLocation || filterLevel) && (
           <div className="search-results">
             {searching && <p className="hint">Searching…</p>}
             {!searching && results.length === 0 && (
-              <p className="hint">No one found by that name.</p>
+              <p className="hint">No one found with those filters.</p>
             )}
             {results.map((u) => (
               <div key={u.userId} className="person-row">

@@ -1,6 +1,16 @@
 .friends-search {
   margin-bottom: 18px;
 }
+.friends-filters {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 170px 260px;
+  gap: 10px;
+}
+@media (max-width: 639px) {
+  .friends-filters {
+    grid-template-columns: 1fr;
+  }
+}
 .search-results {
   margin-top: 12px;
   display: flex;

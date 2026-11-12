@@ -83,12 +83,14 @@ public class FriendService {
 				m.getSenderId().equals(userId), unread);
 	}
 
-	public List<UserSearchResult> search(Long userId, String query) {
-		if (query == null || query.isBlank()) {
+	public List<UserSearchResult> search(Long userId, String query, String location, String level) {
+		String name = query != null && !query.isBlank() ? query.strip() : null;
+		String loc = location != null && !location.isBlank() ? location.strip() : null;
+		String lvl = level != null && !level.isBlank() ? level.strip() : null;
+		if (name == null && loc == null && lvl == null) {
 			return List.of();
 		}
-		return users.findTop20ByOnboardedTrueAndNameContainingIgnoreCaseAndIdNot(query.strip(), userId)
-				.stream()
+		return users.searchUsers(userId, name, loc, lvl, PageRequest.of(0, 20)).stream()
 				.map(UserSearchResult::from)
 				.toList();
 	}

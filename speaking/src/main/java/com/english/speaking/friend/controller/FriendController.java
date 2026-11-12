@@ -38,8 +38,10 @@ public class FriendController {
 	@GetMapping("/search")
 	public List<UserSearchResult> search(
 			@AuthenticationPrincipal Long userId,
-			@org.springframework.web.bind.annotation.RequestParam String q) {
-		return friends.search(userId, q);
+			@org.springframework.web.bind.annotation.RequestParam(required = false) String q,
+			@org.springframework.web.bind.annotation.RequestParam(required = false) String location,
+			@org.springframework.web.bind.annotation.RequestParam(required = false) String level) {
+		return friends.search(userId, q, location, level);
 	}
 
 	@PostMapping("/requests")
