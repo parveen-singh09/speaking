@@ -104,29 +104,43 @@ export function useCall(myId: number) {
     [myId, cleanup],
   )
 
-  const addMic = useCallback(async (pc: RTCPeerConnection) => {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-    localRef.current = stream
-    stream.getTracks().forEach((t) => pc.addTrack(t, stream))
+  const getMic = useCallback(async (): Promise<MediaStream | null> => {
+    try {
+      return await navigator.mediaDevices.getUserMedia({ audio: true })
+    } catch {
+      return null
+    }
   }, [])
 
   const startCall = useCallback(
     async (targetId: string) => {
       setPeerId(targetId)
       setStatus('calling')
+      const stream = await getMic()
+      if (!stream) {
+        cleanup()
+        return
+      }
       const pc = await createPc(targetId)
-      await addMic(pc)
+      localRef.current = stream
+      stream.getTracks().forEach((t) => pc.addTrack(t, stream))
       const offer = await pc.createOffer()
       await pc.setLocalDescription(offer)
       sendWs({ type: 'call.offer', to: targetId, payload: { from: String(myId), sdp: offer } })
     },
-    [createPc, addMic, myId],
+    [createPc, getMic, cleanup, myId],
   )
 
   const answerOffer = useCallback(
     async (from: string, sdp: RTCSessionDescriptionInit) => {
+      const stream = await getMic()
+      if (!stream) {
+        hangupRef.current()
+        return
+      }
       const pc = await createPc(from)
-      await addMic(pc)
+      localRef.current = stream
+      stream.getTracks().forEach((t) => pc.addTrack(t, stream))
       await pc.setRemoteDescription(sdp)
       for (const c of pendingIce.current) {
         await pc.addIceCandidate(c)
@@ -136,7 +150,7 @@ export function useCall(myId: number) {
       await pc.setLocalDescription(answer)
       sendWs({ type: 'call.answer', to: from, payload: { from: String(myId), sdp: answer } })
     },
-    [createPc, addMic, myId],
+    [createPc, getMic, myId],
   )
 
   const acceptCall = useCallback(() => {
