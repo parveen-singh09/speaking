@@ -155,6 +155,7 @@ export function useCall(myId: number) {
 
   const acceptCall = useCallback(() => {
     if (peerId && incomingOffer.current) {
+      setStatus('calling')
       answerOffer(peerId, incomingOffer.current)
     }
   }, [peerId, answerOffer])
