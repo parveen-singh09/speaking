@@ -139,6 +139,13 @@
   background: var(--violet-100);
   object-fit: cover;
 }
+.cs-avatar-blank {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-pill);
+  border: 4px solid var(--surface);
+  background: var(--violet-100);
+}
 .cs-name-row {
   display: inline-flex;
   align-items: center;

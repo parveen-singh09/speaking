@@ -106,7 +106,11 @@ export function CallScreen({ call }: CallScreenProps) {
       <div className="callscreen" role="dialog" aria-label="Incoming call">
         <div className="cs-top">
           <span className="cs-avatar-ring cs-avatar-ring-pulse">
-            <img src={partner?.avatarUrl ?? '/avatars/man1_adult.svg'} alt="" />
+            {partner?.avatarUrl ? (
+              <img src={partner.avatarUrl} alt="" referrerPolicy="no-referrer" />
+            ) : (
+              <span className="cs-avatar-blank" aria-hidden="true" />
+            )}
           </span>
           <span className="cs-name">{name}</span>
           <span className="cs-incoming-label">Incoming call…</span>
@@ -136,7 +140,11 @@ export function CallScreen({ call }: CallScreenProps) {
       <div className="callscreen" role="dialog" aria-label="Calling">
         <div className="cs-top">
           <span className="cs-avatar-ring cs-avatar-ring-pulse">
-            <img src={partner?.avatarUrl ?? '/avatars/man1_adult.svg'} alt="" />
+            {partner?.avatarUrl ? (
+              <img src={partner.avatarUrl} alt="" referrerPolicy="no-referrer" />
+            ) : (
+              <span className="cs-avatar-blank" aria-hidden="true" />
+            )}
           </span>
           <span className="cs-name">{name}</span>
           <span className="cs-establishing">
@@ -193,7 +201,11 @@ export function CallScreen({ call }: CallScreenProps) {
         <div className="cs-body">
         <div className="cs-identity">
           <span className="cs-avatar-ring cs-avatar-glow">
-            <img src={partner?.avatarUrl ?? '/avatars/man1_adult.svg'} alt="" />
+            {partner?.avatarUrl ? (
+              <img src={partner.avatarUrl} alt="" referrerPolicy="no-referrer" />
+            ) : (
+              <span className="cs-avatar-blank" aria-hidden="true" />
+            )}
           </span>
           <span className="cs-name">{name}</span>
           {level && <span className="cs-occ">{level} speaker</span>}

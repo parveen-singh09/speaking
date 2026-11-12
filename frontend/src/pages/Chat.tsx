@@ -29,6 +29,7 @@ export function Chat() {
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [peer, setPeer] = useState<Friend | null>(null)
   const [draft, setDraft] = useState('')
+  const [loaded, setLoaded] = useState(false)
   const endRef = useRef<HTMLDivElement | null>(null)
   const call = useCallContext()
 
@@ -44,7 +45,12 @@ export function Chat() {
 
   useEffect(() => {
     connectWs()
-    fetchHistory(peerId).then(setMessages).catch(() => {})
+    setLoaded(false)
+    setMessages([])
+    fetchHistory(peerId)
+      .then(setMessages)
+      .catch(() => {})
+      .finally(() => setLoaded(true))
     listFriends()
       .then((list) => setPeer(list.find((f) => f.userId === peerId) ?? null))
       .catch(() => {})
@@ -75,7 +81,7 @@ export function Chat() {
     setDraft('')
   }
 
-  const peerName = peer?.name ?? `User ${peerId}`
+  const peerName = peer?.name ?? 'Speaking partner'
 
   return (
     <AppShell>
@@ -115,7 +121,7 @@ export function Chat() {
         </header>
 
         <div className="chat-scroll">
-          {messages.length === 0 ? (
+          {!loaded ? null : messages.length === 0 ? (
             <div className="chat-empty">
               <span className="chat-empty-ico">
                 <Icon name="chat" size={26} />
