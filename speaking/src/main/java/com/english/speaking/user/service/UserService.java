@@ -62,6 +62,9 @@ public class UserService {
 			if (request.location() != null) {
 				user.setLocation(request.location());
 			}
+			if (request.avatarUrl() != null) {
+				user.setAvatarUrl(request.avatarUrl());
+			}
 			return UserResponse.from(users.save(user));
 		});
 	}

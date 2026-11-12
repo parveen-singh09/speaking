@@ -57,6 +57,9 @@ public class AuthService {
 		if (user.getName() == null) {
 			user.setName(g.name());
 		}
+		if (g.picture() != null && !g.picture().isBlank()) {
+			user.setGoogleAvatarUrl(g.picture());
+		}
 		if (user.getAvatarUrl() == null) {
 			user.setAvatarUrl(g.picture());
 		}

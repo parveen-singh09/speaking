@@ -103,6 +103,35 @@
   flex-direction: column;
   gap: 16px;
 }
+.avatar-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.avatar-opt {
+  display: grid;
+  place-items: center;
+  padding: 3px;
+  background: var(--surface-sunk);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  transition: border-color var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease);
+}
+.avatar-opt:hover {
+  transform: translateY(-2px);
+  border-color: var(--violet-200);
+}
+.avatar-opt.selected {
+  border-color: var(--violet-500);
+  background: var(--violet-050);
+}
+.avatar-opt img {
+  border-radius: 8px;
+}
+.avatar-opt.google img {
+  aspect-ratio: 1;
+  object-fit: cover;
+}
 .edit-foot {
   display: flex;
   align-items: center;

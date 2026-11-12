@@ -184,10 +184,6 @@ export function Friends() {
                       width={52}
                       height={52}
                     />
-                    <span
-                      className={f.online ? 'presence-dot online' : 'presence-dot offline'}
-                      aria-label={f.online ? 'Online' : 'Offline'}
-                    />
                   </span>
                 </button>
                 <button
@@ -209,6 +205,7 @@ export function Friends() {
                   </span>
                   {hasUnread && <span className="friend-row-badge">{f.unread}</span>}
                 </button>
+                {f.online && <span className="online-text">online</span>}
                 <button
                   type="button"
                   className="friend-row-call"

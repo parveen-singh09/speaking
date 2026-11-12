@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { fetchMe, updateProfile, type Me } from '../lib/auth'
 import { fetchStats, type Stats } from '../lib/dashboard'
 import { listFriends } from '../lib/friends'
-import { OCCUPATIONS, COUNTRIES } from '../lib/onboarding-data'
+import { OCCUPATIONS, COUNTRIES, avatarsFor } from '../lib/onboarding-data'
 import { useAuth } from '../store/auth'
 import { disconnectWs } from '../lib/ws'
 import { useTheme, toggleTheme } from '../lib/theme'
@@ -34,6 +34,7 @@ export function Profile() {
   const [level, setLevel] = useState('')
   const [occupation, setOccupation] = useState('')
   const [location, setLocation] = useState('')
+  const [avatarUrl, setAvatarUrl] = useState('')
   const [status, setStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
   const navigate = useNavigate()
   const clearAuth = useAuth((s) => s.clear)
@@ -53,6 +54,7 @@ export function Profile() {
         setLevel(m.englishLevel ?? '')
         setOccupation(m.occupation ?? '')
         setLocation(m.location ?? '')
+        setAvatarUrl(m.avatarUrl ?? '')
       })
       .catch(() => setStatus('error'))
     fetchStats().then(setStats).catch(() => {})
@@ -68,6 +70,7 @@ export function Profile() {
         englishLevel: level || undefined,
         occupation: occupation || undefined,
         location: location || undefined,
+        avatarUrl: avatarUrl || undefined,
       })
       setMe(updated)
       setStatus('saved')
@@ -96,10 +99,11 @@ export function Profile() {
         <div className="profile-avatar-wrap">
           <img
             className="profile-avatar"
-            src={me.avatarUrl ?? '/avatars/man1_adult.svg'}
+            src={avatarUrl || '/avatars/man1_adult.svg'}
             alt=""
             width={104}
             height={104}
+            referrerPolicy="no-referrer"
           />
         </div>
         <div>
@@ -137,6 +141,32 @@ export function Profile() {
       </div>
 
       <form className="card card-pad edit-form" onSubmit={save}>
+        <div className="field">
+          <span className="field-label">Avatar</span>
+          <div className="avatar-picker">
+            {me.googleAvatarUrl && (
+              <button
+                type="button"
+                className={avatarUrl === me.googleAvatarUrl ? 'avatar-opt google selected' : 'avatar-opt google'}
+                onClick={() => setAvatarUrl(me.googleAvatarUrl as string)}
+                title="Your Google photo"
+              >
+                <img src={me.googleAvatarUrl} alt="Google photo" width={56} height={56} referrerPolicy="no-referrer" />
+              </button>
+            )}
+            {avatarsFor(me.gender ?? 'male').map((url) => (
+              <button
+                key={url}
+                type="button"
+                className={avatarUrl === url ? 'avatar-opt selected' : 'avatar-opt'}
+                onClick={() => setAvatarUrl(url)}
+              >
+                <img src={url} alt="" width={56} height={56} />
+              </button>
+            ))}
+          </div>
+        </div>
+
         <label className="field">
           <span className="field-label">About you</span>
           <textarea

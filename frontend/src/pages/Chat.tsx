@@ -97,9 +97,6 @@ export function Chat() {
               width={40}
               height={40}
             />
-            {peer && (
-              <span className={peer.online ? 'presence-dot online' : 'presence-dot offline'} />
-            )}
           </span>
           <span className="chat-head-text">
             <span className="chat-peer-name">{peerName}</span>

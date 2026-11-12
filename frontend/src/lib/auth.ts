@@ -11,6 +11,7 @@ export interface Me {
   email: string
   name: string | null
   avatarUrl: string | null
+  googleAvatarUrl: string | null
   bio: string | null
   englishLevel: string | null
   gender: string | null
@@ -44,6 +45,7 @@ export interface UpdateProfile {
   englishLevel?: string
   occupation?: string
   location?: string
+  avatarUrl?: string
 }
 
 export async function updateProfile(update: UpdateProfile): Promise<Me> {

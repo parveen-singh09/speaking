@@ -85,15 +85,12 @@ export function FriendProfile() {
       <section className="profile-hero">
         <div className="profile-avatar-wrap">
           <img
-            className="profile-avatar"
+            className={profile.online ? 'profile-avatar online-ring' : 'profile-avatar'}
             src={profile.avatarUrl ?? '/avatars/man1_adult.svg'}
             alt=""
             width={104}
             height={104}
-          />
-          <span
-            className={profile.online ? 'fp-presence online' : 'fp-presence offline'}
-            aria-label={profile.online ? 'Online' : 'Offline'}
+            referrerPolicy="no-referrer"
           />
         </div>
         <div>

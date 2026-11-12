@@ -332,6 +332,21 @@
   border: 2px solid var(--surface);
 }
 
+.online-ring {
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--live);
+}
+.online-text {
+  margin-left: 8px;
+  margin-right: 6px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.72rem;
+  color: var(--live);
+  text-transform: lowercase;
+  white-space: nowrap;
+}
+
 .hint {
   font-size: 0.86rem;
   color: var(--ink-soft);

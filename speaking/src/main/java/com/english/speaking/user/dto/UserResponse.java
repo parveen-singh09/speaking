@@ -7,6 +7,7 @@ public record UserResponse(
 		String email,
 		String name,
 		String avatarUrl,
+		String googleAvatarUrl,
 		String bio,
 		String englishLevel,
 		String gender,
@@ -16,7 +17,7 @@ public record UserResponse(
 
 	public static UserResponse from(User u) {
 		return new UserResponse(u.getId(), u.getEmail(), u.getName(),
-				u.getAvatarUrl(), u.getBio(), u.getEnglishLevel(),
+				u.getAvatarUrl(), u.getGoogleAvatarUrl(), u.getBio(), u.getEnglishLevel(),
 				u.getGender(), u.getOccupation(), u.getLocation(), u.isOnboarded());
 	}
 }
