@@ -93,12 +93,6 @@
   place-items: center;
 }
 
-.nav-avatar {
-  border-radius: 50%;
-  object-fit: cover;
-  background: var(--violet-100);
-}
-
 .nav-badge {
   display: grid;
   place-items: center;

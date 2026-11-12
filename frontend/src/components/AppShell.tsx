@@ -3,7 +3,6 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../store/auth'
 import { disconnectWs, onWs, type Envelope } from '../lib/ws'
 import { listPending, listFriends } from '../lib/friends'
-import { fetchMe } from '../lib/auth'
 import { useTheme, toggleTheme } from '../lib/theme'
 import { Icon } from './icons'
 
@@ -23,13 +22,6 @@ export function AppShell({ children }: AppShellProps) {
   const clear = useAuth((s) => s.clear)
   const theme = useTheme()
   const [friendsBadge, setFriendsBadge] = useState(0)
-  const [myAvatar, setMyAvatar] = useState<string | null>(null)
-
-  useEffect(() => {
-    fetchMe()
-      .then((m) => setMyAvatar(m.avatarUrl))
-      .catch(() => {})
-  }, [location.pathname])
 
   const refreshBadge = useCallback(() => {
     Promise.all([listPending().catch(() => []), listFriends().catch(() => [])])
@@ -61,22 +53,6 @@ export function AppShell({ children }: AppShellProps) {
   const isActive = (path: string) => location.pathname === path
   const badgeFor = (path: string) => (path === '/friends' ? friendsBadge : 0)
 
-  const renderGlyph = (item: (typeof NAV)[number], size: number) => {
-    if (item.path === '/profile' && myAvatar) {
-      return (
-        <img
-          className="nav-avatar"
-          src={myAvatar}
-          alt=""
-          width={size}
-          height={size}
-          referrerPolicy="no-referrer"
-        />
-      )
-    }
-    return <Icon name={item.icon} size={size} />
-  }
-
   return (
     <div className="shell">
       <nav className="rail" aria-label="Main navigation">
@@ -93,7 +69,7 @@ export function AppShell({ children }: AppShellProps) {
             aria-current={isActive(item.path) ? 'page' : undefined}
             onClick={() => navigate(item.path)}
           >
-            {renderGlyph(item, 20)}
+            <Icon name={item.icon} />
             {item.label}
             {badgeFor(item.path) > 0 && <span className="nav-badge">{badgeFor(item.path)}</span>}
           </button>
@@ -121,7 +97,7 @@ export function AppShell({ children }: AppShellProps) {
             onClick={() => navigate(item.path)}
           >
             <span className="tab-icon">
-              {renderGlyph(item, 22)}
+              <Icon name={item.icon} size={22} />
               {badgeFor(item.path) > 0 && (
                 <span className="nav-badge nav-badge-dot">{badgeFor(item.path)}</span>
               )}
