@@ -61,6 +61,7 @@ export function FriendProfile() {
   }
 
   const name = profile.name ?? 'Speaking partner'
+  const sent = profile.requestPending || requestSent
   const addFriend = async () => {
     try {
       await sendFriendRequest(profile.userId)
@@ -127,11 +128,11 @@ export function FriendProfile() {
           <button
             className="btn btn-soft"
             type="button"
-            disabled={requestSent}
+            disabled={sent}
             onClick={addFriend}
           >
-            <Icon name={requestSent ? 'check' : 'user-plus'} size={18} />
-            {requestSent ? 'Request sent' : 'Add friend'}
+            <Icon name={sent ? 'check' : 'user-plus'} size={18} />
+            {sent ? 'Request sent' : 'Add friend'}
           </button>
         )}
       </div>

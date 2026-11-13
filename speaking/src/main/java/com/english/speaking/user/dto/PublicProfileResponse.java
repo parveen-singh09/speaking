@@ -12,4 +12,5 @@ public record PublicProfileResponse(
 		long totalCalls,
 		long totalCallSec,
 		long friends,
-		boolean isFriend) {}
+		boolean isFriend,
+		boolean requestPending) {}

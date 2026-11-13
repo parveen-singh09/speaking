@@ -79,6 +79,7 @@ export interface PublicProfile {
   totalCallSec: number
   friends: number
   isFriend: boolean
+  requestPending: boolean
 }
 
 export async function fetchPublicProfile(userId: number): Promise<PublicProfile> {
