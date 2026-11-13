@@ -1,6 +1,18 @@
-import { Link } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '../store/auth'
 
 export function Marketing() {
+  const navigate = useNavigate()
+  const token = useAuth((s) => s.accessToken)
+
+  // Logged-in users reopening the app land here (start_url) — send them in.
+  useEffect(() => {
+    if (token) {
+      navigate('/home', { replace: true })
+    }
+  }, [token, navigate])
+
   return (
     <div className="mk">
       <header className="mk-bar">
