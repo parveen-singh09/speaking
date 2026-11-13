@@ -94,8 +94,14 @@ export async function refreshAccessToken(): Promise<string | null> {
     const res = await api.post<TokenResponse>('/auth/refresh', { refreshToken })
     useAuth.getState().setTokens(res.data.accessToken, res.data.refreshToken)
     return res.data.accessToken
-  } catch {
-    useAuth.getState().clear()
+  } catch (err) {
+    const status = (err as { response?: { status?: number } })?.response?.status
+    // Only log out if the server actually rejected the token (401/403).
+    // Network errors (mobile switching Wi-Fi/cellular, offline moments) have
+    // no response status — keep the session so the user isn't logged out.
+    if (status === 401 || status === 403) {
+      useAuth.getState().clear()
+    }
     return null
   }
 }
