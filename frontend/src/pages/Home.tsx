@@ -44,6 +44,7 @@ export function Home() {
   const navigate = useNavigate()
   const [me, setMe] = useState<Me | null>(null)
   const [calls, setCalls] = useState<CallSummary[]>([])
+  const [callsLoaded, setCallsLoaded] = useState(false)
   const [onlineCount, setOnlineCount] = useState<number | null>(null)
   const [showCount, setShowCount] = useState(false)
 
@@ -56,7 +57,10 @@ export function Home() {
         }
         setMe(m)
         connectWs()
-        fetchRecentCalls().then(setCalls).catch(() => {})
+        fetchRecentCalls()
+          .then(setCalls)
+          .catch(() => {})
+          .finally(() => setCallsLoaded(true))
       })
       .catch(() => {})
   }, [navigate])
@@ -160,7 +164,15 @@ export function Home() {
 
       <section className="feed">
         <p className="feed-title">Recent Calls</p>
-        {calls.length === 0 ? (
+        {!callsLoaded ? (
+          <div className="shell-loading" aria-busy="true" aria-label="Loading">
+            <span className="dots">
+              <span />
+              <span />
+              <span />
+            </span>
+          </div>
+        ) : calls.length === 0 ? (
           <div className="card empty">
             No calls yet. Start a call to begin your first conversation.
           </div>
