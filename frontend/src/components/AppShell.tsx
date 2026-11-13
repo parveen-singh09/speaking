@@ -58,7 +58,7 @@ export function AppShell({ children }: AppShellProps) {
       <nav className="rail" aria-label="Main navigation">
         <div className="rail-logo">
           <span className="wordmark">
-            Peer<span>Up</span>
+            Dialog<span>Buddy</span>
           </span>
         </div>
         {NAV.map((item) => (

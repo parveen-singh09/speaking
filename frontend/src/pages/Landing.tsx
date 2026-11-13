@@ -115,7 +115,7 @@ export function Landing() {
     <div className="landing">
       <section className="landing-pane">
         <span className="wordmark">
-          Peer<span>Up</span>
+          Dialog<span>Buddy</span>
         </span>
         <span className="landing-eyebrow">Speak, don&rsquo;t just study</span>
         <h1>
