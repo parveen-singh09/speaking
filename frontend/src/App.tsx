@@ -16,6 +16,7 @@ export function App() {
     <CallProvider>
       <Routes>
       <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="/app" element={<Landing />} />
       <Route path="/login" element={<Landing />} />
       <Route
         path="/home"
