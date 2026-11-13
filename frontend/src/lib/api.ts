@@ -50,8 +50,8 @@ api.interceptors.response.use(
       return api(original)
     } catch (e) {
       useAuth.getState().clear()
-      if (window.location.pathname !== '/') {
-        window.location.href = '/'
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login'
       }
       return Promise.reject(e)
     }

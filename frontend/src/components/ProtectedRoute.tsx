@@ -9,7 +9,7 @@ interface ProtectedRouteProps {
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const accessToken = useAuth((s) => s.accessToken)
   if (!accessToken) {
-    return <Navigate to="/" replace />
+    return <Navigate to="/login" replace />
   }
   return <>{children}</>
 }

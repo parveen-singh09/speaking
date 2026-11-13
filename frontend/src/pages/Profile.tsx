@@ -43,7 +43,7 @@ export function Profile() {
   const handleLogout = () => {
     disconnectWs()
     clearAuth()
-    navigate('/')
+    navigate('/login')
   }
 
   useEffect(() => {

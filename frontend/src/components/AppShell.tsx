@@ -47,7 +47,7 @@ export function AppShell({ children }: AppShellProps) {
   const handleLogout = () => {
     disconnectWs()
     clear()
-    navigate('/')
+    navigate('/login')
   }
 
   const isActive = (path: string) => location.pathname === path
