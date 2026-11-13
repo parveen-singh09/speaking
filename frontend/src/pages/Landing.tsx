@@ -122,8 +122,7 @@ export function Landing() {
           Learn English by <em>talking</em> to real people.
         </h1>
         <p className="landing-sub">
-          Get matched with a partner and jump into a live voice call. No scripts, no pressure &mdash;
-          just conversation.
+          The fastest way to speak English with confidence, jump into a real conversation.
         </p>
 
         <form className="auth-form" onSubmit={submit}>
