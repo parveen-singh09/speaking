@@ -6,7 +6,6 @@ export function Marketing() {
   const navigate = useNavigate()
   const token = useAuth((s) => s.accessToken)
 
-  // Logged-in users reopening the app land here (start_url) — send them in.
   useEffect(() => {
     if (token) {
       navigate('/home', { replace: true })

@@ -22,7 +22,6 @@ export function Landing() {
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
 
-  // Already signed in (e.g. reopening the home-screen app) — skip login.
   useEffect(() => {
     if (token) {
       navigate('/home', { replace: true })

@@ -50,8 +50,6 @@ api.interceptors.response.use(
       return api(original)
     } catch (e) {
       const refreshStatus = (e as AxiosError)?.response?.status
-      // Only force logout if the refresh token was genuinely rejected.
-      // A network failure (mobile losing connection) must not log the user out.
       if (refreshStatus === 401 || refreshStatus === 403) {
         useAuth.getState().clear()
         if (window.location.pathname !== '/login') {
