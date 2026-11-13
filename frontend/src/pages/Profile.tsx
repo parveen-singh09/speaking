@@ -174,7 +174,7 @@ export function Profile() {
             value={bio}
             maxLength={500}
             rows={4}
-            placeholder="A sentence or two about you and what you want to practise…"
+            placeholder="A sentence or two about you and what you want to practice…"
             onChange={(e) => setBio(e.target.value)}
           />
         </label>

@@ -87,7 +87,7 @@ public class UserService {
 		String who = name != null && !name.isBlank() ? name : "A learner";
 		String occ = r.occupation().replace('_', ' ');
 		return String.format(
-				"%s — a %s English speaker and %s from %s, here to practise conversation.",
+				"%s — a %s English speaker and %s from %s, here to practice conversation.",
 				who, r.englishLevel(), occ, r.location());
 	}
 }

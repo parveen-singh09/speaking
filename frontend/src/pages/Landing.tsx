@@ -117,7 +117,7 @@ export function Landing() {
         <span className="wordmark">
           Dialog<span>Buddy</span>
         </span>
-        <span className="landing-eyebrow">Speak, don&rsquo;t just study</span>
+        <span className="landing-eyebrow">Books can&rsquo;t talk back</span>
         <h1>
           Learn English by <em>talking</em> to real people.
         </h1>

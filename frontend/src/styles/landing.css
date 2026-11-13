@@ -51,6 +51,22 @@
   margin-top: 6px;
 }
 
+.landing-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-top: 20px;
+  font-size: 0.85rem;
+}
+.landing-links a {
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+.landing-links a:hover {
+  color: var(--violet-700);
+  text-decoration: underline;
+}
+
 .auth-toggle {
   align-self: center;
   padding: 6px;

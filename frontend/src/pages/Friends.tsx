@@ -85,7 +85,7 @@ export function Friends() {
   return (
     <AppShell>
       <h1 className="page-title">Friends</h1>
-      <p className="page-sub">Find people to practise with and keep the conversation going.</p>
+      <p className="page-sub">Find people to practice with and keep the conversation going.</p>
 
       <section className="friends-search">
         <div className="friends-filters">

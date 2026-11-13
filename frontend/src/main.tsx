@@ -12,7 +12,7 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ErrorBoundary>
       <GoogleOAuthProvider clientId={googleClientId}>
-        <BrowserRouter>
+        <BrowserRouter basename="/login">
           <App />
         </BrowserRouter>
       </GoogleOAuthProvider>

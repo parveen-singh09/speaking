@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /home
+Disallow: /friends
+Disallow: /profile
+Disallow: /chat/
+Disallow: /user/
+Disallow: /calls
+Disallow: /onboarding
+
+Sitemap: https://www.dialogbuddy.com/sitemap.xml

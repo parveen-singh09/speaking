@@ -1,0 +1,23 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "createdAt": "2026-11-13T07:26:25.460Z",
+        "reason": "DialogBuddy design system: app already uses Inter+Fredoka app-wide (pre-session); static pages match it intentionally for brand consistency"
+      },
+      {
+        "rule": "pulsing-dot",
+        "value": "*",
+        "files": [
+          "public/*.html"
+        ],
+        "createdAt": "2026-11-13T09:58:55.211Z",
+        "reason": "Landing hero Live-call preview mock illustrates the live-call feature (intentional demo); content pages share pages.css but never render the dot (false positive)"
+      }
+    ]
+  }
+}
