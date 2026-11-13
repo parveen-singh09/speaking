@@ -222,7 +222,6 @@ details p {
   color: var(--violet);
 }
 
-/* Landing page */
 .lp-main {
   max-width: none;
   padding: 0;
@@ -359,7 +358,6 @@ details p {
   max-width: 1200px;
 }
 
-/* Landing header: wordmark left, nav centred, login button right */
 .lp-header {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -410,7 +408,6 @@ details p {
   }
 }
 
-/* Sticky landing header bar (full-width bar, centred content) */
 .lp-header-bar {
   position: sticky;
   top: 0;
@@ -422,7 +419,6 @@ details p {
 }
 
 
-/* Hero: two-column with live-call preview */
 .lp-hero-copy .lp-cta {
   justify-content: flex-start;
 }
@@ -620,7 +616,6 @@ details p {
   }
 }
 
-/* Extra landing sections */
 .lp-grid-4 {
   grid-template-columns: repeat(4, 1fr);
 }
@@ -646,7 +641,6 @@ details p {
   }
 }
 
-/* Feature-card icon chips */
 .lp-ico {
   display: grid;
   place-items: center;

@@ -1,5 +1,6 @@
 package com.english.speaking.user.service;
 
+import com.english.speaking.call.repository.CallRepository;
 import com.english.speaking.call.repository.UserStatsRepository;
 import com.english.speaking.friend.repository.FriendshipRepository;
 import com.english.speaking.user.dto.OnboardingRequest;
@@ -18,13 +19,15 @@ public class UserService {
 	private final UserRepository users;
 	private final UserStatsRepository stats;
 	private final FriendshipRepository friendships;
+	private final CallRepository calls;
 	private final PresenceService presence;
 
 	public UserService(UserRepository users, UserStatsRepository stats,
-			FriendshipRepository friendships, PresenceService presence) {
+			FriendshipRepository friendships, CallRepository calls, PresenceService presence) {
 		this.users = users;
 		this.stats = stats;
 		this.friendships = friendships;
+		this.calls = calls;
 		this.presence = presence;
 	}
 
@@ -33,7 +36,9 @@ public class UserService {
 	}
 
 	public Optional<PublicProfileResponse> publicProfile(Long viewerId, Long targetId) {
-		if (!viewerId.equals(targetId) && !friendships.areFriends(viewerId, targetId)) {
+		if (!viewerId.equals(targetId)
+				&& !friendships.areFriends(viewerId, targetId)
+				&& !calls.haveSharedCall(viewerId, targetId)) {
 			return Optional.empty();
 		}
 		return users.findById(targetId).map(u -> {

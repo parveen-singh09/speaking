@@ -17,4 +17,9 @@ public interface CallRepository extends JpaRepository<Call, Long> {
 			+ "order by c.startedAt desc")
 	java.util.List<Call> findRecentForUser(@Param("userId") Long userId,
 			org.springframework.data.domain.Pageable pageable);
+
+	@Query("select count(c) > 0 from Call c where "
+			+ "(c.callerId = :a and c.calleeId = :b) or "
+			+ "(c.callerId = :b and c.calleeId = :a)")
+	boolean haveSharedCall(@Param("a") Long a, @Param("b") Long b);
 }
