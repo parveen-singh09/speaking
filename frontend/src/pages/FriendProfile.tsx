@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { fetchPublicProfile, type PublicProfile } from '../lib/auth'
+import { sendFriendRequest } from '../lib/friends'
+import { sendFriendRequest } from '../lib/friends'
 import { OCCUPATIONS } from '../lib/onboarding-data'
 import { AppShell } from '../components/AppShell'
 import { useCallContext } from '../components/CallProvider'
@@ -29,6 +31,8 @@ export function FriendProfile() {
 
   const [profile, setProfile] = useState<PublicProfile | null>(null)
   const [error, setError] = useState(false)
+  const [requestSent, setRequestSent] = useState(false)
+  const [requestSent, setRequestSent] = useState(false)
 
   useEffect(() => {
     fetchPublicProfile(id)
@@ -59,6 +63,14 @@ export function FriendProfile() {
   }
 
   const name = profile.name ?? 'Speaking partner'
+  const addFriend = async () => {
+    try {
+      await sendFriendRequest(profile.userId)
+      setRequestSent(true)
+    } catch {
+      // ignore: duplicate/already-sent requests are a no-op server-side
+    }
+  }
   const startCall = () => {
     call.callPeer(String(profile.userId), {
       name: profile.name,
@@ -67,6 +79,15 @@ export function FriendProfile() {
       englishLevel: profile.englishLevel,
       location: profile.location,
     })
+  }
+
+  const addFriend = async () => {
+    try {
+      await sendFriendRequest(profile.userId)
+      setRequestSent(true)
+    } catch {
+      setRequestSent(false)
+    }
   }
 
   const info = [
@@ -104,14 +125,26 @@ export function FriendProfile() {
           <Icon name="phone" size={18} />
           Call
         </button>
-        <button
-          className="btn btn-soft"
-          type="button"
-          onClick={() => navigate(`/chat/${profile.userId}`)}
-        >
-          <Icon name="chat" size={18} />
-          Message
-        </button>
+        {profile.isFriend ? (
+          <button
+            className="btn btn-soft"
+            type="button"
+            onClick={() => navigate(`/chat/${profile.userId}`)}
+          >
+            <Icon name="chat" size={18} />
+            Message
+          </button>
+        ) : (
+          <button
+            className="btn btn-soft"
+            type="button"
+            disabled={requestSent}
+            onClick={addFriend}
+          >
+            <Icon name={requestSent ? 'check' : 'user-plus'} size={18} />
+            {requestSent ? 'Request sent' : 'Add friend'}
+          </button>
+        )}
       </div>
 
       <div className="stat-row profile-stats">

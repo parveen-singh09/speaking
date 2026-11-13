@@ -11,4 +11,5 @@ public record PublicProfileResponse(
 		boolean online,
 		long totalCalls,
 		long totalCallSec,
-		long friends) {}
+		long friends,
+		boolean isFriend) {}

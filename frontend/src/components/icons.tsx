@@ -34,6 +34,7 @@ const PATHS: Record<string, string> = {
   speakerOff: 'M11 5 6 9H2v6h4l5 4zM23 9l-6 6M17 9l6 6',
   'chevron-down': 'm6 9 6 6 6-6',
   check: 'M20 6 9 17l-5-5',
+  'user-plus': 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M19 8v6M22 11h-6',
   sun: 'M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10zM12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4',
   moon: 'M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z',
 }

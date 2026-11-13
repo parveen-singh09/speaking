@@ -41,6 +41,7 @@ public class UserService {
 				&& !calls.haveSharedCall(viewerId, targetId)) {
 			return Optional.empty();
 		}
+		boolean isFriend = viewerId.equals(targetId) || friendships.areFriends(viewerId, targetId);
 		return users.findById(targetId).map(u -> {
 			var s = stats.findById(targetId).orElse(null);
 			long totalCalls = s != null ? s.getTotalCalls() : 0;
@@ -48,7 +49,7 @@ public class UserService {
 			long friendCount = friendships.countAcceptedForUser(targetId);
 			return new PublicProfileResponse(u.getId(), u.getName(), u.getAvatarUrl(),
 					u.getBio(), u.getEnglishLevel(), u.getOccupation(), u.getLocation(),
-					presence.isOnline(targetId), totalCalls, totalSec, friendCount);
+					presence.isOnline(targetId), totalCalls, totalSec, friendCount, isFriend);
 		});
 	}
 
