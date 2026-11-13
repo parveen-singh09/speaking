@@ -125,6 +125,8 @@ export function Landing() {
           The fastest way to speak English with confidence, jump into a real conversation.
         </p>
 
+        <AuthDebug />
+
         <form className="auth-form" onSubmit={submit}>
           {mode === 'signup' && (
             <input
@@ -207,6 +209,52 @@ export function Landing() {
           </div>
         </div>
       </aside>
+    </div>
+  )
+}
+
+function AuthDebug() {
+  const read = (k: string) => {
+    try {
+      return localStorage.getItem(k)
+    } catch {
+      return '<storage blocked>'
+    }
+  }
+  const access = read('accessToken')
+  const refresh = read('refreshToken')
+
+  const expiry = (token: string | null): string => {
+    if (!token) return '—'
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]))
+      if (!payload.exp) return 'no exp'
+      const secsLeft = payload.exp - Math.floor(Date.now() / 1000)
+      return secsLeft > 0 ? `valid, ${Math.round(secsLeft / 3600)}h left` : `EXPIRED ${Math.round(-secsLeft / 3600)}h ago`
+    } catch {
+      return 'unreadable'
+    }
+  }
+
+  return (
+    <div
+      style={{
+        margin: '12px 0',
+        padding: '12px 14px',
+        fontSize: '0.78rem',
+        lineHeight: 1.6,
+        fontFamily: 'monospace',
+        color: 'var(--ink)',
+        background: 'var(--surface-sunk)',
+        border: '1px dashed var(--border-strong)',
+        borderRadius: '10px',
+        wordBreak: 'break-all',
+      }}
+    >
+      <strong>AUTH DEBUG (temporary)</strong>
+      <div>accessToken: {access ? `present (${expiry(access)})` : 'MISSING'}</div>
+      <div>refreshToken: {refresh ? `present (${expiry(refresh)})` : 'MISSING'}</div>
+      <div>standalone PWA: {String(window.matchMedia('(display-mode: standalone)').matches)}</div>
     </div>
   )
 }
