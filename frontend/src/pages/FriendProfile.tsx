@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { fetchPublicProfile, type PublicProfile } from '../lib/auth'
 import { sendFriendRequest } from '../lib/friends'
-import { sendFriendRequest } from '../lib/friends'
 import { OCCUPATIONS } from '../lib/onboarding-data'
 import { AppShell } from '../components/AppShell'
 import { useCallContext } from '../components/CallProvider'
@@ -31,7 +30,6 @@ export function FriendProfile() {
 
   const [profile, setProfile] = useState<PublicProfile | null>(null)
   const [error, setError] = useState(false)
-  const [requestSent, setRequestSent] = useState(false)
   const [requestSent, setRequestSent] = useState(false)
 
   useEffect(() => {
@@ -79,15 +77,6 @@ export function FriendProfile() {
       englishLevel: profile.englishLevel,
       location: profile.location,
     })
-  }
-
-  const addFriend = async () => {
-    try {
-      await sendFriendRequest(profile.userId)
-      setRequestSent(true)
-    } catch {
-      setRequestSent(false)
-    }
   }
 
   const info = [
