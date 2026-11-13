@@ -1,8 +1,0 @@
-/login       /app.html   200
-/home        /app.html   200
-/friends     /app.html   200
-/profile     /app.html   200
-/calls       /app.html   200
-/onboarding  /app.html   200
-/chat/*      /app.html   200
-/user/*      /app.html   200

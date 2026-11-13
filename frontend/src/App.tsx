@@ -1,4 +1,5 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
+import { Marketing } from './pages/Marketing'
 import { Landing } from './pages/Landing'
 import { Home } from './pages/Home'
 import { Profile } from './pages/Profile'
@@ -15,8 +16,7 @@ export function App() {
   return (
     <CallProvider>
       <Routes>
-      <Route path="/" element={<Navigate to="/login" replace />} />
-      <Route path="/app" element={<Landing />} />
+      <Route path="/" element={<Marketing />} />
       <Route path="/login" element={<Landing />} />
       <Route
         path="/home"

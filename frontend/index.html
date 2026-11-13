@@ -17,10 +17,21 @@
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('theme')
+          var system = window.matchMedia('(prefers-color-scheme: dark)').matches
+          var dark = saved === 'dark' || (!saved && system)
+          document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light')
+        } catch (e) {
+          void e
+        }
+      })()
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/pages.css" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -35,264 +46,20 @@
         "@context": "https://schema.org",
         "@type": "FAQPage",
         "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "How can I practice English speaking?",
-            "acceptedAnswer": { "@type": "Answer", "text": "<p>The most effective way to practice English speaking is to have real conversations as often as possible. DialogBuddy matches you with a partner at your level for live voice calls, so you can practice speaking naturally without scripts or pressure. Daily short conversations build fluency faster than studying grammar alone.</p>" }
-          },
-          {
-            "@type": "Question",
-            "name": "How do I learn to speak English fluently?",
-            "acceptedAnswer": { "@type": "Answer", "text": "<p>Fluency comes from regular, active use of the language. Speak rather than only read or listen, practice with real people, learn vocabulary in context, and do not fear mistakes. Fifteen minutes of real conversation every day improves fluency steadily.</p>" }
-          },
-          {
-            "@type": "Question",
-            "name": "How can I improve my English speaking at home for free?",
-            "acceptedAnswer": { "@type": "Answer", "text": "<p>You can improve your spoken English at home for free by practicing with conversation partners online, thinking in English, reading aloud, and recording yourself to check pronunciation. DialogBuddy is free to start and connects you with real partners for live voice practice from anywhere.</p>" }
-          },
-          {
-            "@type": "Question",
-            "name": "How do I overcome the fear of speaking English?",
-            "acceptedAnswer": { "@type": "Answer", "text": "<p>Fear fades with practice in a safe, judgment-free setting. Start with friendly partners who are also learning, keep conversations low-pressure, and remember mistakes are a normal part of learning.</p>" }
-          },
-          {
-            "@type": "Question",
-            "name": "How can I improve my English pronunciation?",
-            "acceptedAnswer": { "@type": "Answer", "text": "<p>Improve pronunciation by listening closely to native and fluent speakers, repeating what you hear, and getting feedback during real conversations. Speaking with partners on DialogBuddy lets you hear natural pronunciation and practice your own in context, which is far more effective than silent study.</p>" }
-          },
-          {
-            "@type": "Question",
-            "name": "What is DialogBuddy and how does it work?",
-            "acceptedAnswer": { "@type": "Answer", "text": "<p>DialogBuddy is a platform for practicing spoken English with real people. You create an account, set your English level and interests, and get matched with a partner for a live voice call. You can also add friends, chat, and call them directly to keep practicing.</p>" }
-          },
-          {
-            "@type": "Question",
-            "name": "Is DialogBuddy free to use?",
-            "acceptedAnswer": { "@type": "Answer", "text": "<p>Yes. You can create an account and start having English conversations on DialogBuddy for free, using your email or Google account.</p>" }
-          },
-          {
-            "@type": "Question",
-            "name": "How long does it take to become fluent in English?",
-            "acceptedAnswer": { "@type": "Answer", "text": "<p>The time to fluency depends on your starting level, how often you practice, and how much you speak. Learners who have regular spoken conversations typically progress much faster than those who only study. Daily speaking practice is the single biggest accelerator of fluency.</p>" }
-          }
+          { "@type": "Question", "name": "How can I practice English speaking?", "acceptedAnswer": { "@type": "Answer", "text": "<p>The most effective way to practice English speaking is to have real conversations as often as possible. DialogBuddy matches you with a partner at your level for live voice calls, so you can practice speaking naturally without scripts or pressure.</p>" } },
+          { "@type": "Question", "name": "How do I learn to speak English fluently?", "acceptedAnswer": { "@type": "Answer", "text": "<p>Fluency comes from regular, active use of the language. Speak rather than only read or listen, practice with real people, learn vocabulary in context, and do not fear mistakes. Fifteen minutes of real conversation every day improves fluency steadily.</p>" } },
+          { "@type": "Question", "name": "How can I improve my English speaking at home for free?", "acceptedAnswer": { "@type": "Answer", "text": "<p>You can improve your spoken English at home for free by practicing with conversation partners online, thinking in English, reading aloud, and recording yourself. DialogBuddy is free to start and connects you with real partners for live voice practice from anywhere.</p>" } },
+          { "@type": "Question", "name": "How do I overcome the fear of speaking English?", "acceptedAnswer": { "@type": "Answer", "text": "<p>Fear fades with practice in a safe, judgment-free setting. Start with friendly partners who are also learning, keep conversations low-pressure, and remember mistakes are a normal part of learning.</p>" } },
+          { "@type": "Question", "name": "How can I improve my English pronunciation?", "acceptedAnswer": { "@type": "Answer", "text": "<p>Improve pronunciation by listening closely to fluent speakers, repeating what you hear, and getting feedback during real conversations. Speaking with partners on DialogBuddy lets you practice pronunciation in context.</p>" } },
+          { "@type": "Question", "name": "What is DialogBuddy and how does it work?", "acceptedAnswer": { "@type": "Answer", "text": "<p>DialogBuddy is a platform for practicing spoken English with real people. You create an account, set your English level and interests, and get matched with a partner for a live voice call. You can also add friends, chat, and call them directly.</p>" } },
+          { "@type": "Question", "name": "Is DialogBuddy free to use?", "acceptedAnswer": { "@type": "Answer", "text": "<p>Yes. You can create an account and start having English conversations on DialogBuddy for free, using your email or Google account.</p>" } },
+          { "@type": "Question", "name": "How long does it take to become fluent in English?", "acceptedAnswer": { "@type": "Answer", "text": "<p>The time to fluency depends on your starting level, how often you practice, and how much you speak. Daily speaking practice is the single biggest accelerator of fluency.</p>" } }
         ]
       }
     </script>
   </head>
   <body>
-    <header class="lp-header-bar">
-      <div class="site-header lp-header">
-        <a class="wordmark" href="/">Dialog<span>Buddy</span></a>
-        <nav class="site-nav lp-nav">
-          <a href="#how">How it works</a>
-          <a href="#features">Features</a>
-          <a href="/#faq">FAQ</a>
-        </nav>
-        <a class="lp-login" href="/login">Log in</a>
-      </div>
-    </header>
-
-    <main class="lp-main">
-      <section class="lp-hero" aria-labelledby="hero-h">
-        <div class="lp-hero-copy">
-          <span class="lp-eyebrow">Speak, don't just study</span>
-          <h1 id="hero-h">Learn English by <em>talking</em> to real people</h1>
-          <p class="lead">DialogBuddy matches you with a partner for a live voice call, so you practice real conversation. The fastest way to speak English with confidence.</p>
-          <div class="lp-cta">
-            <a class="lp-btn lp-btn-primary" href="/login">Start speaking free</a>
-            <a class="lp-btn lp-btn-ghost" href="#how">See how it works</a>
-          </div>
-          <div class="lp-trust">
-            <span class="lp-avatars">
-              <img src="/avatars/woman3_adult.svg" alt="" width="34" height="34" />
-              <img src="/avatars/man5_adult.svg" alt="" width="34" height="34" />
-              <img src="/avatars/woman8_adult.svg" alt="" width="34" height="34" />
-              <img src="/avatars/man9_adult.svg" alt="" width="34" height="34" />
-            </span>
-            <span class="lp-trust-text">Learners practicing live, right now</span>
-          </div>
-        </div>
-
-        <div class="lp-hero-visual" aria-hidden="true">
-          <span class="lp-float lp-float-1"><img src="/avatars/woman11_adult.svg" alt="" width="52" height="52" /></span>
-          <span class="lp-float lp-float-2"><img src="/avatars/man2_adult.svg" alt="" width="44" height="44" /></span>
-          <span class="lp-float lp-float-3"><img src="/avatars/woman1_adult.svg" alt="" width="40" height="40" /></span>
-
-          <div class="lp-callcard">
-            <span class="lp-call-live"><span class="lp-live-dot"></span> Live call</span>
-            <span class="lp-call-avatar">
-              <img src="/avatars/man13_adult.svg" alt="" width="96" height="96" />
-            </span>
-            <span class="lp-call-name">Rishi</span>
-            <span class="lp-call-meta">Intermediate · speaking now</span>
-            <span class="lp-wave">
-              <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-            </span>
-            <span class="lp-call-timer">02:14</span>
-          </div>
-        </div>
-      </section>
-
-      <section class="lp-section" id="how" aria-labelledby="how-h">
-        <h2 id="how-h">How it works</h2>
-        <p class="sub">Three steps to your first real English conversation.</p>
-        <div class="lp-grid">
-          <div class="lp-feature">
-            <div class="lp-step-num">1</div>
-            <h3>Create your profile</h3>
-            <p>Sign up free and tell us your English level and interests so we can match you well.</p>
-          </div>
-          <div class="lp-feature">
-            <div class="lp-step-num">2</div>
-            <h3>Get matched</h3>
-            <p>We pair you with a partner at your level who's ready to talk, right now.</p>
-          </div>
-          <div class="lp-feature">
-            <div class="lp-step-num">3</div>
-            <h3>Talk &amp; improve</h3>
-            <p>Jump into a live voice call and practice speaking. Add friends and keep going.</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="lp-section" id="features" aria-labelledby="feat-h">
-        <h2 id="feat-h">Why DialogBuddy</h2>
-        <p class="sub">Built for learners who want to actually speak, not just memorise.</p>
-        <div class="lp-grid">
-          <div class="lp-feature">
-            <span class="lp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
-            <h3>Real voice calls</h3>
-            <p>Practice with live, natural conversation — the only way speaking truly improves.</p>
-          </div>
-          <div class="lp-feature">
-            <span class="lp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h4v4H3zM10 10h4v11h-4zM17 4h4v17h-4z"/></svg></span>
-            <h3>Matched to your level</h3>
-            <p>From beginner to fluent, you're paired with partners who fit where you are.</p>
-          </div>
-          <div class="lp-feature">
-            <span class="lp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span>
-            <h3>Friendly &amp; low-pressure</h3>
-            <p>No grades, no judgment. Build confidence in a space made for learners.</p>
-          </div>
-          <div class="lp-feature">
-            <span class="lp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8m13 10v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
-            <h3>Make friends</h3>
-            <p>Add people you enjoy talking to, chat between calls, and call them anytime.</p>
-          </div>
-          <div class="lp-feature">
-            <span class="lp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v10H4V12M2 7h20v5H2zM12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg></span>
-            <h3>Free to start</h3>
-            <p>Create an account and start your first conversation at no cost.</p>
-          </div>
-          <div class="lp-feature">
-            <span class="lp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span>
-            <h3>Practice anywhere</h3>
-            <p>Works right in your browser on phone or laptop — no install needed.</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="lp-section" id="who" aria-labelledby="who-h">
-        <h2 id="who-h">Who it's for</h2>
-        <p class="sub">If you can read and write English but freeze when it's time to speak, DialogBuddy is built for you.</p>
-        <div class="lp-grid">
-          <div class="lp-feature">
-            <span class="lp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5zM6 12v5c0 1 2.7 2.5 6 2.5s6-1.5 6-2.5v-5"/></svg></span>
-            <h3>Students</h3>
-            <p>Practice for exams, interviews, and classes with partners who get where you are.</p>
-          </div>
-          <div class="lp-feature">
-            <span class="lp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></span>
-            <h3>Working professionals</h3>
-            <p>Build the confidence to speak up in meetings, calls, and presentations.</p>
-          </div>
-          <div class="lp-feature">
-            <span class="lp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13l2 2 4-4"/></svg></span>
-            <h3>Job seekers</h3>
-            <p>Rehearse real conversations so interviews feel natural, not nerve-racking.</p>
-          </div>
-          <div class="lp-feature">
-            <span class="lp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg></span>
-            <h3>Travellers &amp; everyday learners</h3>
-            <p>Get comfortable chatting about anything — work, hobbies, daily life.</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="lp-section" id="levels" aria-labelledby="levels-h">
-        <h2 id="levels-h">For every level</h2>
-        <p class="sub">We match you with partners who fit where you are — and grow with you.</p>
-        <div class="lp-grid lp-grid-4">
-          <div class="lp-feature">
-            <span class="lp-level-tag">Beginner</span>
-            <p>Start with simple, patient conversations. Short exchanges, zero judgment.</p>
-          </div>
-          <div class="lp-feature">
-            <span class="lp-level-tag">Intermediate</span>
-            <p>Hold longer conversations on everyday topics and smooth out hesitation.</p>
-          </div>
-          <div class="lp-feature">
-            <span class="lp-level-tag">Advanced</span>
-            <p>Debate, tell stories, and express nuance with fluent speaking partners.</p>
-          </div>
-          <div class="lp-feature">
-            <span class="lp-level-tag">Fluent</span>
-            <p>Keep your edge sharp and help others while you polish the finer details.</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="lp-section" id="faq" aria-labelledby="faq-h">
-        <h2 id="faq-h">Frequently asked questions</h2>
-        <p class="sub">Everything you need to know about practicing English speaking with DialogBuddy.</p>
-        <div class="lp-faq">
-          <details open>
-            <summary>How can I practice English speaking?</summary>
-            <p>The most effective way to practice English speaking is to have real conversations as often as possible. DialogBuddy matches you with a partner at your level for live voice calls, so you can practice speaking naturally without scripts or pressure. Daily short conversations build fluency faster than studying grammar alone.</p>
-          </details>
-          <details>
-            <summary>How do I learn to speak English fluently?</summary>
-            <p>Fluency comes from regular, active use of the language. Speak rather than only read or listen, practice with real people, learn vocabulary in context, and don't fear mistakes. Fifteen minutes of real conversation every day improves fluency steadily.</p>
-          </details>
-          <details>
-            <summary>How can I improve my English speaking at home for free?</summary>
-            <p>You can improve your spoken English at home for free by practicing with conversation partners online, thinking in English, reading aloud, and recording yourself to check pronunciation. DialogBuddy is free to start and connects you with real partners for live voice practice from anywhere.</p>
-          </details>
-          <details>
-            <summary>How do I overcome the fear of speaking English?</summary>
-            <p>Fear fades with practice in a safe, judgment-free setting. Start with friendly partners who are also learning, keep conversations low-pressure, and remember mistakes are a normal part of learning.</p>
-          </details>
-          <details>
-            <summary>How can I improve my English pronunciation?</summary>
-            <p>Improve pronunciation by listening closely to native and fluent speakers, repeating what you hear, and getting feedback during real conversations. Speaking with partners on DialogBuddy lets you hear natural pronunciation and practice your own in context, which is far more effective than silent study.</p>
-          </details>
-          <details>
-            <summary>What is DialogBuddy and how does it work?</summary>
-            <p>DialogBuddy is a platform for practicing spoken English with real people. You create an account, set your English level and interests, and get matched with a partner for a live voice call. You can also add friends, chat, and call them directly to keep practicing.</p>
-          </details>
-          <details>
-            <summary>Is DialogBuddy free to use?</summary>
-            <p>Yes. You can create an account and start having English conversations on DialogBuddy for free, using your email or Google account.</p>
-          </details>
-          <details>
-            <summary>How long does it take to become fluent in English?</summary>
-            <p>The time to fluency depends on your starting level, how often you practice, and how much you speak. Learners who have regular spoken conversations typically progress much faster than those who only study. Daily speaking practice is the single biggest accelerator of fluency.</p>
-          </details>
-        </div>
-      </section>
-    </main>
-
-    <footer class="site-footer lp-footer">
-      <div class="site-footer-inner">
-        <span class="muted">© DialogBuddy. Speak English with real people.</span>
-        <nav>
-          <a href="/about.html">About</a>
-          <a href="/#faq">FAQ</a>
-          <a href="/contact.html">Contact</a>
-          <a href="/privacy.html">Privacy</a>
-          <a href="/terms.html">Terms</a>
-        </nav>
-      </div>
-    </footer>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
