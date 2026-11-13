@@ -28,7 +28,7 @@ export function Marketing() {
             </h1>
             <p className="mk-lead">
               DialogBuddy matches you with a partner for a live voice call, so you practice real
-              conversation. The fastest way to speak English with confidence.
+              conversation.
             </p>
             <div className="mk-cta">
               <Link className="mk-btn mk-btn-primary" to="/login">
