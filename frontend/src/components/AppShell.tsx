@@ -12,7 +12,7 @@ interface AppShellProps {
 
 const NAV = [
   { path: '/home', label: 'Home', icon: 'home' as const },
-  { path: '/friends', label: 'Friends', icon: 'friends' as const },
+  { path: '/friends', label: 'Friends', icon: 'chat' as const },
   { path: '/profile', label: 'Profile', icon: 'profile' as const },
 ]
 
