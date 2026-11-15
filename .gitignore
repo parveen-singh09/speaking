@@ -1,0 +1,10 @@
+# Production / free-tier secrets (keep *.example tracked)
+.env.prod
+.env.prod.*
+!.env.prod.example
+.env.free
+.env.free.*
+!.env.free.example
+
+# Build output
+target/
