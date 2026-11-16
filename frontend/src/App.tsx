@@ -75,6 +75,7 @@ export function App() {
           </ProtectedRoute>
         }
       />
+        <Route path="/auth/callback" element={<AuthCallback />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </CallProvider>
