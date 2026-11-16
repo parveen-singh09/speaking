@@ -20,8 +20,19 @@ export interface Me {
   onboarded: boolean
 }
 
+// --- OLD popup flow (kept for possible revert; not currently used) ---
 export async function loginWithGoogleCode(code: string): Promise<void> {
   const res = await api.post<TokenResponse>('/auth/google', { code })
+  useAuth.getState().setTokens(res.data.accessToken, res.data.refreshToken)
+}
+
+// --- NEW server-side redirect flow (active) ---
+export function redirectToGoogle(): void {
+  window.location.href = `${import.meta.env.VITE_API_URL as string}/auth/google/start`
+}
+
+export async function exchangeGoogleCode(code: string): Promise<void> {
+  const res = await api.post<TokenResponse>('/auth/google/exchange', { code })
   useAuth.getState().setTokens(res.data.accessToken, res.data.refreshToken)
 }
 

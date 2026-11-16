@@ -9,6 +9,7 @@ import { FriendProfile } from './pages/FriendProfile'
 import { CallHistory } from './pages/CallHistory'
 import { Onboarding } from './pages/Onboarding'
 import { NotFound } from './pages/NotFound'
+import { AuthCallback } from './pages/AuthCallback'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import { CallProvider } from './components/CallProvider'
 

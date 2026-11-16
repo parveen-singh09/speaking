@@ -1,7 +1,6 @@
-import { useGoogleLogin } from '@react-oauth/google'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { loginWithGoogleCode, loginWithPassword, signup, fetchMe } from '../lib/auth'
+import { redirectToGoogle, loginWithPassword, signup, fetchMe } from '../lib/auth'
 import { useAuth } from '../store/auth'
 
 type Mode = 'login' | 'signup'
@@ -33,25 +32,35 @@ export function Landing() {
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
 
-  const googleLogin = useGoogleLogin({
-    flow: 'auth-code',
-    onSuccess: async (response) => {
-      setGoogleBusy(true)
-      setError(null)
-      try {
-        await loginWithGoogleCode(response.code)
-        const me = await fetchMe()
-        navigate(me.onboarded ? '/home' : '/onboarding', { replace: true })
-      } catch {
-        setError('Sign-in failed. Please try again.')
-        setGoogleBusy(false)
-      }
-    },
-    onError: () => {
-      setGoogleBusy(false)
-      setError('Google sign-in was cancelled.')
-    },
-  })
+  // --- OLD popup flow (kept for possible revert) ---
+  // import { useGoogleLogin } from '@react-oauth/google'
+  // import { loginWithGoogleCode } from '../lib/auth'
+  // const googleLogin = useGoogleLogin({
+  //   flow: 'auth-code',
+  //   onSuccess: async (response) => {
+  //     setGoogleBusy(true)
+  //     setError(null)
+  //     try {
+  //       await loginWithGoogleCode(response.code)
+  //       const me = await fetchMe()
+  //       navigate(me.onboarded ? '/home' : '/onboarding', { replace: true })
+  //     } catch {
+  //       setError('Sign-in failed. Please try again.')
+  //       setGoogleBusy(false)
+  //     }
+  //   },
+  //   onError: () => {
+  //     setGoogleBusy(false)
+  //     setError('Google sign-in was cancelled.')
+  //   },
+  // })
+
+  // --- NEW server-side redirect flow (active) ---
+  const googleLogin = () => {
+    setGoogleBusy(true)
+    setError(null)
+    redirectToGoogle()
+  }
 
   const validate = (): string | null => {
     const trimmedEmail = email.trim()
