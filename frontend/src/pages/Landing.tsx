@@ -21,18 +21,19 @@ export function Landing() {
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
 
+  const [params, setParams] = useSearchParams()
+
   useEffect(() => {
-    if (token) {
+    if (token && !params.get('code') && !params.get('error')) {
       navigate('/home', { replace: true })
     }
-  }, [token, navigate])
+  }, [token, navigate, params])
   const [googleBusy, setGoogleBusy] = useState(false)
   const [mode, setMode] = useState<Mode>('login')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
 
-  const [params, setParams] = useSearchParams()
   const handledCode = useRef(false)
   useEffect(() => {
     if (handledCode.current) {
