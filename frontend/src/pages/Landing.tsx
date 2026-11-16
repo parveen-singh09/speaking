@@ -1,6 +1,6 @@
-import { useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
-import { redirectToGoogle, loginWithPassword, signup, fetchMe } from '../lib/auth'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import { redirectToGoogle, exchangeGoogleCode, loginWithPassword, signup, fetchMe } from '../lib/auth'
 import { useAuth } from '../store/auth'
 
 type Mode = 'login' | 'signup'
@@ -31,6 +31,35 @@ export function Landing() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
+
+  const [params, setParams] = useSearchParams()
+  const handledCode = useRef(false)
+  useEffect(() => {
+    if (handledCode.current) {
+      return
+    }
+    const code = params.get('code')
+    const oauthError = params.get('error')
+    if (oauthError) {
+      handledCode.current = true
+      setError('Google sign-in failed. Please try again.')
+      setParams({}, { replace: true })
+      return
+    }
+    if (!code) {
+      return
+    }
+    handledCode.current = true
+    setGoogleBusy(true)
+    exchangeGoogleCode(code)
+      .then(() => fetchMe())
+      .then((me) => navigate(me.onboarded ? '/home' : '/onboarding', { replace: true }))
+      .catch(() => {
+        setGoogleBusy(false)
+        setError('Google sign-in failed. Please try again.')
+        setParams({}, { replace: true })
+      })
+  }, [params, setParams, navigate])
 
   // --- OLD popup flow (kept for possible revert) ---
   // import { useGoogleLogin } from '@react-oauth/google'

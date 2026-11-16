@@ -88,7 +88,7 @@ public class GoogleAuthController {
 
 	private ResponseEntity<Void> redirectToFrontend(String query) {
 		return ResponseEntity.status(HttpStatus.FOUND)
-				.location(URI.create(frontendUrl + "/auth/callback?" + query)).build();
+				.location(URI.create(frontendUrl + "/login?" + query)).build();
 	}
 
 	private static String enc(String value) {
