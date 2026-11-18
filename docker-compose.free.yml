@@ -5,6 +5,7 @@ services:
     depends_on:
       - redis
     environment:
+      JAVA_TOOL_OPTIONS: "-Xmx1g -Xss512k"
       PORT: 8080
       DATABASE_URL: ${DATABASE_URL}
       DATABASE_USERNAME: ${DATABASE_USERNAME}
