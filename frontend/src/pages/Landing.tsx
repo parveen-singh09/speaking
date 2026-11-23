@@ -87,7 +87,6 @@ export function Landing() {
 
   // --- NEW server-side redirect flow (active) ---
   const googleLogin = () => {
-    setGoogleBusy(true)
     setError(null)
     redirectToGoogle()
   }
