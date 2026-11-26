@@ -9,7 +9,6 @@ import { FriendProfile } from './pages/FriendProfile'
 import { CallHistory } from './pages/CallHistory'
 import { Onboarding } from './pages/Onboarding'
 import { NotFound } from './pages/NotFound'
-import { AuthCallback } from './pages/AuthCallback'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import { CallProvider } from './components/CallProvider'
 
@@ -75,8 +74,7 @@ export function App() {
           </ProtectedRoute>
         }
       />
-        <Route path="/auth/callback" element={<AuthCallback />} />
-        <Route path="*" element={<NotFound />} />
+          <Route path="*" element={<NotFound />} />
       </Routes>
     </CallProvider>
   )
